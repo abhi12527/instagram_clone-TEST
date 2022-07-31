@@ -5,6 +5,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:insta_clone/models/user.dart';
 import 'package:insta_clone/provider/user_provider.dart';
+import 'package:insta_clone/resources/firestore_methods.dart';
+import 'package:insta_clone/screens/comment_screen.dart';
 import 'package:insta_clone/utils/colors.dart';
 import 'package:insta_clone/utils/global_vairable.dart';
 import 'package:insta_clone/widgets/like_animation.dart';
@@ -67,7 +69,7 @@ class _PostCardState extends State<PostCard> {
                           padding: const EdgeInsets.symmetric(
                             vertical: 16,
                           ),
-                          children: ['Delete']
+                          children: ['Delete', 'Cancel']
                               .map((e) => GestureDetector(
                                     onTap: () {
                                       Navigator.pop(context);
@@ -114,7 +116,12 @@ class _PostCardState extends State<PostCard> {
             // IMAGE SECTION
           ),
           GestureDetector(
-            onDoubleTap: () {
+            onDoubleTap: () async {
+              await FirestoreMethods().likePost(
+                widget.post['postId'],
+                user.uid,
+                widget.post['likes'],
+              );
               setState(() {
                 isLikeAnimating = true;
               });
@@ -142,13 +149,10 @@ class _PostCardState extends State<PostCard> {
                         isLikeAnimating = false;
                       });
                     },
-                    child: _footerButton(
-                      child: const Icon(
-                        Icons.favorite,
-                        color: Colors.white,
-                        size: 120,
-                      ),
-                      onPressed: () {},
+                    child: const Icon(
+                      Icons.favorite,
+                      color: Colors.white,
+                      size: 120,
                     ),
                   ),
                 ),
@@ -162,11 +166,22 @@ class _PostCardState extends State<PostCard> {
                 isAnimating: widget.post['likes'].contains(user.uid),
                 smallLike: true,
                 child: _footerButton(
-                  child: const Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {},
+                  child: widget.post['likes'].contains(user.uid)
+                      ? const Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        )
+                      : const Icon(
+                          Icons.favorite_outline,
+                          color: Colors.white,
+                        ),
+                  onPressed: () async {
+                    await FirestoreMethods().likePost(
+                      widget.post['postId'],
+                      user.uid,
+                      widget.post['likes'],
+                    );
+                  },
                 ),
               ),
               _footerButton(
@@ -175,7 +190,12 @@ class _PostCardState extends State<PostCard> {
                   color: Colors.white,
                   height: 20,
                 ),
-                onPressed: () {},
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CommentsSceeen(),
+                  ),
+                ),
               ),
               _footerButton(
                 child: SvgPicture.asset(
