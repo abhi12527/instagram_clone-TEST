@@ -54,4 +54,10 @@ class FirestoreMethods {
       print(e.toString());
     }
   }
+
+  postComment(
+      String postId, String uid, String name, String profilePic) async {
+
+        
+      }
 }
