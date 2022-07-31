@@ -4,14 +4,14 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-pickImage(ImageSource source) async {
+pickImage(ImageSource source,[double height = 480, double width=640,int quality = 50]) async {
   final ImagePicker _imagePicker = ImagePicker();
 
   XFile? _file = await _imagePicker.pickImage(
     source: source,
-    maxHeight: 480,
-    maxWidth: 640,
-    imageQuality: 50,
+    maxHeight: height,
+    maxWidth: width,
+    // imageQuality: quality,
   );
   if (_file != null) {
     return await _file.readAsBytes();
