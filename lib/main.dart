@@ -1,13 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:insta_clone/responsice/mobile_screen_layout.dart';
-import 'package:insta_clone/responsice/responsive_layout.dart';
-import 'package:insta_clone/responsice/web_screen_layout.dart';
-import 'package:insta_clone/utils/colors.dart';
+import 'package:insta_clone/screens/login_screen.dart';
+import 'package:insta_clone/screens/signup_screen.dart';
+import 'responsive/mobile_screen_layout.dart';
+import 'responsive/responsive_layout.dart';
+import 'responsive/web_screen_layout.dart';
+import 'utils/colors.dart';
+import 'utils/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  if (kIsWeb) {
+    Firebase.initializeApp(options: firebaseOptions);
+  } else {
+    await Firebase.initializeApp();
+  }
   runApp(const MyApp());
 }
 
@@ -23,7 +31,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
       home: ResponsiveLayout(
-        mobileScreenLayout: MobileScreenLayout(),
+        mobileScreenLayout: SignupScreen(),
         webScreenLayout: WebScreenLayout(),
       ),
     );
