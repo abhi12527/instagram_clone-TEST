@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:insta_clone/models/user.dart';
-import 'package:insta_clone/resources/auth_methods.dart';
+import '../models/user.dart';
+import '../resources/auth_methods.dart';
 
 class UserProvider with ChangeNotifier {
   UserModel _user = UserModel(
@@ -16,7 +16,6 @@ class UserProvider with ChangeNotifier {
 
   refreshUser() async {
     UserModel userModel = await _authMethods.getUserDetails();
-    print(userModel);
     _user = userModel;
     notifyListeners();
   }

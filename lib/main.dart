@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:insta_clone/provider/user_provider.dart';
+import 'provider/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'screens/login_screen.dart';
 import 'responsive/mobile_screen_layout.dart';

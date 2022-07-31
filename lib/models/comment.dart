@@ -15,9 +15,9 @@ class Comment {
   String text;
   String uid;
   String name;
-  final commentId;
-  final datePublished;
-  final likes;
+  final String commentId;
+  final DateTime datePublished;
+  final List likes;
   factory Comment.fromJson(String str) => Comment.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());

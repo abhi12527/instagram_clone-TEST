@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:insta_clone/utils/colors.dart';
-import 'package:insta_clone/utils/global_vairable.dart';
-import 'package:insta_clone/widgets/post_card.dart';
+import '../utils/colors.dart';
+import '../utils/global_vairable.dart';
+import '../widgets/post_card.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -57,9 +57,9 @@ class _FeedScreenState extends State<FeedScreen> {
               },
             );
           } else if (snapshot.hasError) {
-            return Center(child: Text('Something went Wrong!'));
+            return const Center(child: Text('Something went Wrong!'));
           } else {
-            return Center(
+            return const Center(
               child: Text(
                   'You have no Feed to Show Start following people to get feed from peoples'),
             );

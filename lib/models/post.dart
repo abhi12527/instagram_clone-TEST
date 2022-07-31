@@ -16,10 +16,10 @@ class Post {
   String username;
   String uid;
   String postId;
-  final datePublished;
+  final DateTime datePublished;
   String postUrl;
   String profImage;
-  final likes;
+  final List likes;
   factory Post.fromJson(String str) => Post.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());

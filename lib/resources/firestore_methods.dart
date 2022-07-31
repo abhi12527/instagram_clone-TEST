@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, empty_catches
+
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -65,7 +67,7 @@ class FirestoreMethods {
   ) async {
     try {
       if (text.isNotEmpty) {
-        String commentId = Uuid().v1();
+        String commentId = const Uuid().v1();
         Comment comment = Comment(
             profilePic: profilePic,
             text: text,

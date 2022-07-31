@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:insta_clone/provider/user_provider.dart';
+import '../provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/global_vairable.dart';

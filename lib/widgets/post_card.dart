@@ -1,17 +1,17 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:insta_clone/models/user.dart';
-import 'package:insta_clone/provider/user_provider.dart';
-import 'package:insta_clone/resources/firestore_methods.dart';
-import 'package:insta_clone/screens/comment_screen.dart';
-import 'package:insta_clone/utils/colors.dart';
-import 'package:insta_clone/utils/global_vairable.dart';
-import 'package:insta_clone/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '/models/user.dart';
+import '/provider/user_provider.dart';
+import '/resources/firestore_methods.dart';
+import '/screens/comment_screen.dart';
+import '/utils/colors.dart';
+import '/utils/global_vairable.dart';
+import '/widgets/like_animation.dart';
 
 class PostCard extends StatefulWidget {
   final post;

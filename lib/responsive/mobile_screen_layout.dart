@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:insta_clone/models/user.dart';
-import 'package:insta_clone/provider/user_provider.dart';
-import 'package:insta_clone/utils/colors.dart';
-import 'package:insta_clone/utils/global_vairable.dart';
-import 'package:provider/provider.dart';
+import '/utils/colors.dart';
+import '/utils/global_vairable.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
@@ -44,10 +41,10 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     return SafeArea(
       child: Scaffold(
         body: PageView(
-          children:homeScreenItems,
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           onPageChanged: onPageChanged,
+          children:homeScreenItems,
         ),
         bottomNavigationBar: CupertinoTabBar(
           backgroundColor: mobileBackgroundColor,

@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:insta_clone/resources/auth_methods.dart';
-import 'package:insta_clone/screens/signup_screen.dart';
-import 'package:insta_clone/utils/utils.dart';
+import '/resources/auth_methods.dart';
+import '/screens/signup_screen.dart';
+import '/utils/utils.dart';
 import '../responsive/mobile_screen_layout.dart';
 import '../responsive/responsive_layout.dart';
 import '../responsive/web_screen_layout.dart';
@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => ResponsiveLayout(
+          builder: (context) => const ResponsiveLayout(
             mobileScreenLayout: MobileScreenLayout(),
             webScreenLayout: WebScreenLayout(),
           ),

@@ -3,18 +3,17 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:insta_clone/responsive/mobile_screen_layout.dart';
-import 'package:insta_clone/screens/login_screen.dart';
-import 'package:insta_clone/utils/utils.dart';
 
-import '../responsive/responsive_layout.dart';
-import '../responsive/web_screen_layout.dart';
+import '/responsive/mobile_screen_layout.dart';
+import '/screens/login_screen.dart';
 import '/utils/colors.dart';
+import '/utils/utils.dart';
 import '/widgets/text_field_input.dart';
 import '../resources/auth_methods.dart';
+import '../responsive/responsive_layout.dart';
+import '../responsive/web_screen_layout.dart';
 import '../utils/global_vairable.dart';
 
 class SignupScreen extends StatefulWidget {

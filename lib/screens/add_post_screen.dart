@@ -4,11 +4,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:insta_clone/models/user.dart';
-import 'package:insta_clone/provider/user_provider.dart';
-import 'package:insta_clone/resources/firestore_methods.dart';
-import 'package:insta_clone/utils/colors.dart';
-import 'package:insta_clone/utils/utils.dart';
+import '/models/user.dart';
+import '/provider/user_provider.dart';
+import '/resources/firestore_methods.dart';
+import '/utils/colors.dart';
+import '/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class AddPostScreen extends StatefulWidget {
@@ -157,7 +157,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               children: [
                 _isLoading
                     ? const LinearProgressIndicator()
-                    : Padding(padding: EdgeInsets.zero),
+                    : const Padding(padding: EdgeInsets.zero),
                 const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
