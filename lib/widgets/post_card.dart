@@ -5,9 +5,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:insta_clone/utils/colors.dart';
 import 'package:insta_clone/utils/global_vairable.dart';
+import 'package:intl/intl.dart';
 
 class PostCard extends StatelessWidget {
-  const PostCard({Key? key}) : super(key: key);
+  final post;
+  const PostCard({Key? key, required this.post}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +24,9 @@ class PostCard extends StatelessWidget {
                 .copyWith(right: 0),
             child: Row(
               children: [
-                const CircleAvatar(
-                  backgroundImage: const NetworkImage(
-                      'https://images.unsplash.com/photo-1564648351416-3eec9f3e85de?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80'),
+                CircleAvatar(
+                  radius: 16,
+                  backgroundImage: NetworkImage(post['profImage']),
                 ),
                 Expanded(
                   child: Padding(
@@ -33,8 +35,8 @@ class PostCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'username',
+                        Text(
+                          post['username'],
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -99,11 +101,12 @@ class PostCard extends StatelessWidget {
             ),
             // IMAGE SECTION
           ),
-          SizedBox(
+          Container(
             height: MediaQuery.of(context).size.height * 0.35,
             width: double.infinity,
+            padding: EdgeInsets.only(top: 3),
             child: Image.network(
-              'https://images.unsplash.com/photo-1564648351416-3eec9f3e85de?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80',
+              post['postUrl'],
               fit: BoxFit.cover,
             ),
 
@@ -159,7 +162,7 @@ class PostCard extends StatelessWidget {
                       .subtitle2!
                       .copyWith(fontWeight: FontWeight.w800),
                   child: Text(
-                    '1238 likes',
+                    '${post['likes'].length} likes',
                     // style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
@@ -173,12 +176,12 @@ class PostCard extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: 'username ',
+                            text: post['username'] + ' ',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          TextSpan(text: 'Hey this is me')
+                          TextSpan(text: post['description'])
                         ]),
                   ),
                 ),
@@ -197,7 +200,9 @@ class PostCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 3),
                   child: Text(
-                    '31/7/2022',
+                    DateFormat.yMMMd()
+                        .format(DateTime.parse(post['datePublished']))
+                        .toString(),
                     style: TextStyle(
                       fontSize: 12,
                       color: secondaryColor,

@@ -1,8 +1,5 @@
-import 'dart:math';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:insta_clone/utils/colors.dart';
 import 'package:insta_clone/utils/global_vairable.dart';
@@ -43,7 +40,32 @@ class _FeedScreenState extends State<FeedScreen> {
           )
         ],
       ),
-      body: PostCard(),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+                child: CircularProgressIndicator(
+              color: primaryColor,
+            ));
+          } else if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                return PostCard(post: snapshot.data!.docs[index]);
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Something went Wrong!'));
+          } else {
+            return Center(
+              child: Text(
+                  'You have no Feed to Show Start following people to get feed from peoples'),
+            );
+          }
+        },
+      ),
     );
   }
 }
