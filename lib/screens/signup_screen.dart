@@ -3,10 +3,15 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:insta_clone/responsive/mobile_screen_layout.dart';
+import 'package:insta_clone/screens/login_screen.dart';
 import 'package:insta_clone/utils/utils.dart';
 
+import '../responsive/responsive_layout.dart';
+import '../responsive/web_screen_layout.dart';
 import '/utils/colors.dart';
 import '/widgets/text_field_input.dart';
 import '../resources/auth_methods.dart';
@@ -51,14 +56,31 @@ class _SignupScreenState extends State<SignupScreen> {
       password: _passwordController.text.trim(),
       username: _usernameController.text.trim(),
       bio: _bioController.text.trim(),
-      file: _image!,
+      file: _image,
     );
     setState(() {
       _isLoading = false;
     });
     if (res != 'success') {
       showSnackBar(res, context);
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+            mobileScreenLayout: MobileScreenLayout(),
+            webScreenLayout: WebScreenLayout(),
+          ),
+        ),
+      );
     }
+  }
+
+  void navigateToLogin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginScreen(),
+      ),
+    );
   }
 
   @override
@@ -156,10 +178,17 @@ class _SignupScreenState extends State<SignupScreen> {
             blankSpace(12),
             blankFlex(2),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: const Text("Don't have an account?"),
+              ),
               GestureDetector(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: const Text('Alreaddy have an account?'),
+                onTap: navigateToLogin,
+                child: const Text(
+                  'Login.',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               )
             ]),

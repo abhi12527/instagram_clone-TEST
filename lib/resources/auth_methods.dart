@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:insta_clone/models/user.dart';
 import 'package:insta_clone/resources/storage_methods.dart';
 
 class AuthMethods {
@@ -14,7 +15,7 @@ class AuthMethods {
     required String password,
     required String username,
     required String bio,
-    required Uint8List file,
+    required Uint8List? file,
   }) async {
     String res = 'Some error Occurred';
 
@@ -29,17 +30,41 @@ class AuthMethods {
           password: password,
         );
         String photoUrl = await StorageMethods()
-            .uploadImageToStorage('profilePics', file, false);
+            .uploadImageToStorage('profilePics', file!, false);
         res = 'Success';
-        await _firestore.collection('users').doc(user.user!.uid).set({
-          'username': username,
-          'uid': user.user!.uid,
-          'email': email,
-          'bio': bio,
-          'photoUrl': photoUrl,
-          'follower': [],
-          'following': [],
-        });
+        UserModel userModel = UserModel(
+          username: username,
+          uid: user.user!.uid,
+          email: email,
+          bio: bio,
+          photoUrl: photoUrl,
+          follower: [],
+          following: [],
+        );
+        await _firestore
+            .collection('users')
+            .doc(user.user!.uid)
+            .set(userModel.toMap());
+      } else {
+        res = 'Input all the Fields';
+      }
+    } catch (error) {
+      res = error.toString();
+    }
+    return res;
+  }
+
+  loginUser({required String email, required String password}) async {
+    String res = 'Some error Occurred';
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        res = 'success';
+      } else {
+        res = "Please Enter all the Fields";
       }
     } catch (error) {
       res = error.toString();
