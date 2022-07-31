@@ -15,7 +15,7 @@ import '../responsive/web_screen_layout.dart';
 import '/utils/colors.dart';
 import '/widgets/text_field_input.dart';
 import '../resources/auth_methods.dart';
-import '../utils/dimensions.dart';
+import '../utils/global_vairable.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);

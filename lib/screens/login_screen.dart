@@ -11,7 +11,7 @@ import '../responsive/web_screen_layout.dart';
 import '/utils/colors.dart';
 import '/widgets/text_field_input.dart';
 
-import '../utils/dimensions.dart';
+import '../utils/global_vairable.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

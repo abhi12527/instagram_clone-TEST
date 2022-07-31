@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:insta_clone/models/user.dart';
 import 'package:insta_clone/provider/user_provider.dart';
 import 'package:insta_clone/utils/colors.dart';
+import 'package:insta_clone/utils/global_vairable.dart';
 import 'package:provider/provider.dart';
 
 class MobileScreenLayout extends StatefulWidget {
@@ -39,17 +40,11 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel user = Provider.of<UserProvider>(context).user;
+    // UserModel user = Provider.of<UserProvider>(context).user;
     return SafeArea(
       child: Scaffold(
         body: PageView(
-          children: [
-            Text('feed'),
-            Text('search'),
-            Text('add'),
-            Text('notif'),
-            Text('account'),
-          ],
+          children:homeScreenItems,
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           onPageChanged: onPageChanged,
