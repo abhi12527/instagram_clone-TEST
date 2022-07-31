@@ -71,4 +71,12 @@ class AuthMethods {
     }
     return res;
   }
+
+  Future<UserModel> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+    DocumentSnapshot snap =
+        await _firestore.collection('users').doc(currentUser.uid).get();
+    UserModel user = UserModel.fromMap(snap.data() as Map<String, dynamic>);
+    return user;
+  }
 }
