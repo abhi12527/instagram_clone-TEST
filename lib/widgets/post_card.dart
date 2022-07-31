@@ -193,7 +193,9 @@ class _PostCardState extends State<PostCard> {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CommentsSceeen(),
+                    builder: (context) => CommentsSceeen(
+                      snap: widget.post,
+                    ),
                   ),
                 ),
               ),

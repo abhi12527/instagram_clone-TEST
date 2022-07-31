@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:insta_clone/models/comment.dart';
 import 'package:insta_clone/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
@@ -56,8 +57,31 @@ class FirestoreMethods {
   }
 
   postComment(
-      String postId, String uid, String name, String profilePic) async {
-
-        
+    String postId,
+    String text,
+    String uid,
+    String name,
+    String profilePic,
+  ) async {
+    try {
+      if (text.isNotEmpty) {
+        String commentId = Uuid().v1();
+        Comment comment = Comment(
+            profilePic: profilePic,
+            text: text,
+            uid: uid,
+            name: name,
+            commentId: commentId,
+            datePublished: DateTime.now(),
+            likes: []);
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .add(comment.toMap());
+      } else {
+        print('Text is Empty');
       }
+    } catch (e) {}
+  }
 }
