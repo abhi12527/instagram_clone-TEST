@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+
 import '/utils/dimensions.dart';
 
 class ResponsiveLayout extends StatelessWidget {
