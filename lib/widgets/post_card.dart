@@ -83,82 +83,8 @@ class _PostCardState extends State<PostCard> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade800,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: ListView(
-                                  shrinkWrap: true,
-                                  children: [
-                                    (user.uid == widget.post['uid']
-                                        ? 'Delete'
-                                        : 'Do Nothing'),
-                                    'Close'
-                                  ]
-                                      .map((e) => Column(
-                                            children: [
-                                              e != 'Delete' && e != 'Do Nothing'
-                                                  ? const Divider()
-                                                  : Container(),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: GestureDetector(
-                                                  onTap: e == 'Delete'
-                                                      ? () async {
-                                                          Navigator.pop(
-                                                              context);
-                                                          await FirestoreMethods()
-                                                              .deletePost(widget
-                                                                      .post[
-                                                                  'postId']);
-                                                        }
-                                                      : () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                  child: Center(
-                                                    child: Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.8,
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16,
-                                                      ),
-                                                      child: Text(
-                                                        e,
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ))
-                                      .toList(),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                  onTap: () async {
+                    await showMenuDialogue(context, user);
                   },
                   child: const Icon(Icons.more_vert_rounded),
                 ),
@@ -334,6 +260,73 @@ class _PostCardState extends State<PostCard> {
           )
         ],
       ),
+    );
+  }
+
+  showMenuDialogue(BuildContext context, UserModel user) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade800,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    (user.uid == widget.post['uid'] ? 'Delete' : 'Do Nothing'),
+                    'Close'
+                  ]
+                      .map((e) => Column(
+                            children: [
+                              e != 'Delete' && e != 'Do Nothing'
+                                  ? const Divider()
+                                  : Container(),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: GestureDetector(
+                                  onTap: e == 'Delete'
+                                      ? () async {
+                                          Navigator.pop(context);
+                                          await FirestoreMethods().deletePost(
+                                              widget.post['postId']);
+                                        }
+                                      : () {
+                                          Navigator.pop(context);
+                                        },
+                                  child: Center(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                        horizontal: 16,
+                                      ),
+                                      child: Text(
+                                        e,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ))
+                      .toList(),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

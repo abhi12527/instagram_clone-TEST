@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:insta_clone/screens/search_screen.dart';
 import '../screens/add_post_screen.dart';
 import '../screens/feed_screen.dart';
 
@@ -8,7 +9,7 @@ const commentIcon = 'assets/images/comment.svg';
 
 List<Widget> homeScreenItems = <Widget>[
   const FeedScreen(),
-  const Text('search'),
+  const SearchScreen(),
   const AddPostScreen(),
   const Text('notif'),
   const Text('account'),
