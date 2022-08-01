@@ -73,7 +73,6 @@ class _CommentCardState extends State<CommentCard> {
                                       color: secondaryColor, fontSize: 12),
                                   moreStyle: const TextStyle(
                                       color: secondaryColor, fontSize: 12),
-
                                 ),
                               ],
                             ),

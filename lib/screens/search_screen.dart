@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:insta_clone/screens/profile_screen.dart';
 import 'package:insta_clone/utils/colors.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -64,20 +65,21 @@ class _SearchScreenState extends State<SearchScreen> {
                     },
                     controller: searchController,
                     decoration: InputDecoration(
-                        hintText: 'Search',
-                        prefixIcon: !_isTyping
-                            ? const Icon(
-                                Icons.search,
-                                color: Colors.grey,
-                              )
-                            : null,
-                        fillColor: const Color(0xFF141318),
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        contentPadding: const EdgeInsets.all(8)),
+                      hintText: 'Search',
+                      prefixIcon: !_isTyping
+                          ? const Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            )
+                          : null,
+                      fillColor: Colors.grey.shade900,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.all(8),
+                    ),
                     style: const TextStyle(fontSize: 14),
                     onFieldSubmitted: (_) {
                       setState(() {
@@ -90,71 +92,83 @@ class _SearchScreenState extends State<SearchScreen> {
             ],
           ),
         ),
-        body: Column(
-          children: [
-            _isShowUsers
-                ? FutureBuilder(
-                    future: FirebaseFirestore.instance
-                        .collection('users')
-                        .where('username',
-                            isGreaterThanOrEqualTo:
-                                searchController.text.trim())
-                        .get(),
-                    builder: (context,
-                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                            snapshot) {
-                      print(snapshot);
-                      if (!snapshot.hasData) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          var doc = snapshot.data!.docs[index];
-                          return ListTile(
-                            leading: CircleAvatar(
-                              radius: 25,
-                              backgroundImage: NetworkImage(doc['photoUrl']),
+        body: _isShowUsers
+            ? FutureBuilder(
+                future: FirebaseFirestore.instance
+                    .collection('users')
+                    .where('username',
+                        isGreaterThanOrEqualTo: searchController.text.trim())
+                    .get(),
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
+                  print(snapshot);
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var doc = snapshot.data!.docs[index];
+                      return ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ProfileScreen(
+                                uid: doc['uid'],
+                              ),
                             ),
-                            title: Text(doc['username']),
-                            subtitle: Text(doc['bio']),
                           );
                         },
+                        leading: CircleAvatar(
+                          radius: 25,
+                          backgroundImage: NetworkImage(doc['photoUrl']),
+                        ),
+                        title: Text(doc['username']),
+                        subtitle: Text(doc['bio']),
                       );
                     },
-                  )
-                : FutureBuilder(
-                    future:
-                        FirebaseFirestore.instance.collection('posts').get(),
-                    builder: (context,
-                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                            snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return Expanded(
-                          child: StaggeredGridView.countBuilder(
-                        crossAxisCount: 3,
-                        itemCount: (snapshot.data! as dynamic).docs.length,
-                        itemBuilder: (context, index) => Image.network(
-                          (snapshot.data! as dynamic).docs[index]['postUrl'],
-                          fit: BoxFit.cover,
-                        ),
-                        staggeredTileBuilder: (index) => StaggeredTile.count(
-                          (index % 7 == 0) ? 2 : 1,
-                          (index % 7 == 0) ? 2 : 1,
-                        ),
-                        mainAxisSpacing: 8.0,
-                        crossAxisSpacing: 8.0,
-                      ));
-                    },
-                  ),
-          ],
-        ),
+                  );
+                },
+              )
+            : FutureBuilder(
+                future: FirebaseFirestore.instance.collection('posts').get(),
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return StaggeredGridView.countBuilder(
+                    crossAxisCount: 3,
+                    itemCount: (snapshot.data! as dynamic).docs.length,
+                    itemBuilder: (context, index) => Image.network(
+                      (snapshot.data! as dynamic).docs[index]['postUrl'],
+                      fit: BoxFit.cover,
+                    ),
+                    staggeredTileBuilder: (index) => StaggeredTile.count(
+                      (index % 7 == 0) ? 2 : 1,
+                      (index % 7 == 0) ? 2 : 1,
+                    ),
+                    mainAxisSpacing: 8.0,
+                    crossAxisSpacing: 8.0,
+                  );
+                },
+              ),
       ),
     );
   }

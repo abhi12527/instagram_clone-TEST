@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import '../provider/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,8 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
 
   @override
   Widget build(BuildContext context) {
+    print(FirebaseAuth.instance.currentUser!.uid);
+
     return LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth > webScreenWidth) {
         return widget.webScreenLayout;

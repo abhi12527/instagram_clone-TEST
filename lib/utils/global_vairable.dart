@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:insta_clone/screens/search_screen.dart';
+import '../screens/search_screen.dart';
 import '../screens/add_post_screen.dart';
 import '../screens/feed_screen.dart';
+import '../screens/profile_screen.dart';
 
 const webScreenWidth = 600;
 const sendIcon = 'assets/images/send.svg';
@@ -12,7 +14,9 @@ List<Widget> homeScreenItems = <Widget>[
   const SearchScreen(),
   const AddPostScreen(),
   const Text('notif'),
-  const Text('account'),
+  ProfileScreen(
+    uid: FirebaseAuth.instance.currentUser!.uid.toString(),
+  ),
 ];
 
 blankSpace([double height = 0, double width = 0]) => SizedBox(
