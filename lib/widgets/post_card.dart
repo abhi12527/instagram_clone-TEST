@@ -94,7 +94,7 @@ class _PostCardState extends State<PostCard> {
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.grey,
+                                  color: Colors.grey.shade800,
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 child: ListView(
@@ -107,29 +107,48 @@ class _PostCardState extends State<PostCard> {
                                   ]
                                       .map((e) => Column(
                                             children: [
-                                              GestureDetector(
-                                                onTap: e == 'Delete'
-                                                    ? () {}
-                                                    : () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                child: Center(
-                                                  child: Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.8,
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                      vertical: 12,
-                                                      horizontal: 16,
+                                              e != 'Delete' && e != 'Do Nothing'
+                                                  ? const Divider()
+                                                  : Container(),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: GestureDetector(
+                                                  onTap: e == 'Delete'
+                                                      ? () async {
+                                                          Navigator.pop(
+                                                              context);
+                                                          await FirestoreMethods()
+                                                              .deletePost(widget
+                                                                      .post[
+                                                                  'postId']);
+                                                        }
+                                                      : () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                  child: Center(
+                                                    child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        vertical: 12,
+                                                        horizontal: 16,
+                                                      ),
+                                                      child: Text(
+                                                        e,
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
                                                     ),
-                                                    child: Text(e),
                                                   ),
                                                 ),
                                               ),
-                                              Divider()
                                             ],
                                           ))
                                       .toList(),
