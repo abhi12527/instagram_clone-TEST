@@ -29,7 +29,7 @@ class _FeedScreenState extends State<FeedScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: InkWell(
+            child: GestureDetector(
               onTap: () {},
               child: SvgPicture.asset(
                 sendIcon,

@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:insta_clone/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +25,27 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
+  int commentLength = 0;
+  @override
+  void initState() {
+    super.initState();
+    getComment();
+  }
+
+  getComment() async {
+    try {
+      QuerySnapshot snap = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(widget.post['postId'])
+          .collection('comments')
+          .get();
+
+      commentLength = snap.docs.length;
+    } on Exception catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,47 +87,56 @@ class _PostCardState extends State<PostCard> {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return ListView(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                          ),
-                          children: ['Delete', 'Cancel']
-                              .map((e) => GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.45),
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.8,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey,
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 12,
-                                              horizontal: 16,
-                                            ),
-                                            child: Text(e),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ))
-                              .toList(),
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  children: [
+                                    (user.uid == widget.post['uid']
+                                        ? 'Delete'
+                                        : 'Do Nothing'),
+                                    'Close'
+                                  ]
+                                      .map((e) => Column(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: e == 'Delete'
+                                                    ? () {}
+                                                    : () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                child: Center(
+                                                  child: Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 16,
+                                                    ),
+                                                    child: Text(e),
+                                                  ),
+                                                ),
+                                              ),
+                                              Divider()
+                                            ],
+                                          ))
+                                      .toList(),
+                                ),
+                              ),
+                            ),
+                          ],
                         );
                       },
                     );
@@ -257,8 +289,8 @@ class _PostCardState extends State<PostCard> {
                 ),
                 InkWell(
                   onTap: () {},
-                  child: const Text(
-                    'View all 200 Comments',
+                  child: Text(
+                    'View all $commentLength Comments',
                     style: TextStyle(
                       fontSize: 14,
                       color: secondaryColor,
@@ -269,7 +301,8 @@ class _PostCardState extends State<PostCard> {
                   padding: const EdgeInsets.symmetric(vertical: 3),
                   child: Text(
                     DateFormat.yMMMd()
-                        .format(DateTime.parse(widget.post['datePublished']))
+                        .format(DateTime.parse(
+                            widget.post['datePublished'].toString()))
                         .toString(),
                     style: const TextStyle(
                       fontSize: 12,

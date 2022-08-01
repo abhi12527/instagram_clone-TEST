@@ -1,8 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:insta_clone/models/user.dart';
+import 'package:insta_clone/provider/user_provider.dart';
+import 'package:insta_clone/resources/firestore_methods.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:readmore/readmore.dart';
 import '../utils/colors.dart';
 
 class CommentCard extends StatefulWidget {
-  const CommentCard({Key? key}) : super(key: key);
+  final comment;
+  final postId;
+  const CommentCard({
+    Key? key,
+    required this.comment,
+    this.postId,
+  }) : super(key: key);
 
   @override
   State<CommentCard> createState() => _CommentCardState();
@@ -11,6 +24,7 @@ class CommentCard extends StatefulWidget {
 class _CommentCardState extends State<CommentCard> {
   @override
   Widget build(BuildContext context) {
+    UserModel user = Provider.of<UserProvider>(context).user;
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 18,
@@ -22,9 +36,9 @@ class _CommentCardState extends State<CommentCard> {
         children: [
           Wrap(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 18,
-                // backgroundImage: NetworkImage(''),
+                backgroundImage: NetworkImage(widget.comment['profilePic']),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16),
@@ -32,39 +46,92 @@ class _CommentCardState extends State<CommentCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    RichText(
-                      text: const TextSpan(
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          TextSpan(
-                            text: 'username ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Text(
+                            '${widget.comment['name']} ',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis),
                           ),
-                          TextSpan(
-                            text: 'description',
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ReadMoreText(
+                                  widget.comment['text'],
+                                  trimCollapsedText: ' show more',
+                                  trimExpandedText: ' show less',
+                                  trimLines: 3,
+                                  trimMode: TrimMode.Line,
+                                  lessStyle: const TextStyle(
+                                      color: secondaryColor, fontSize: 12),
+                                  moreStyle: const TextStyle(
+                                      color: secondaryColor, fontSize: 12),
+
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    const Text(
-                      '23/12/21',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: secondaryColor,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          DateFormat.yMMMd()
+                              .format(DateTime.parse(
+                                  widget.comment['datePublished'].toString()))
+                              .toString(),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: secondaryColor,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          widget.comment['likes'].length.toString() + ' like',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: secondaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            child: const Icon(
-              Icons.favorite,
-              size: 15,
+          GestureDetector(
+            onTap: () async {
+              await FirestoreMethods().likeComment(
+                widget.postId,
+                user.uid,
+                widget.comment['likes'],
+                widget.comment['commentId'],
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              child: widget.comment['likes'].contains(user.uid)
+                  ? const Icon(
+                      Icons.favorite,
+                      size: 15,
+                    )
+                  : const Icon(
+                      Icons.favorite_outline,
+                      size: 15,
+                    ),
             ),
           )
         ],

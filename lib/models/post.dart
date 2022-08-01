@@ -16,7 +16,7 @@ class Post {
   String username;
   String uid;
   String postId;
-  final DateTime datePublished;
+  final String datePublished;
   String postUrl;
   String profImage;
   final List likes;
