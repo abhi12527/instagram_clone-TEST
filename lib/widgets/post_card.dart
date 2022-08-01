@@ -3,7 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:insta_clone/utils/utils.dart';
+import '/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 

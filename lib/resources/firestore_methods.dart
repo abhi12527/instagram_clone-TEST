@@ -3,8 +3,8 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:insta_clone/models/comment.dart';
-import 'package:insta_clone/resources/storage_methods.dart';
+import '/models/comment.dart';
+import '/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/post.dart';
