@@ -31,7 +31,7 @@ class AuthMethods {
         );
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('profilePics', file!, false);
-        res = 'Success';
+        res = 'success';
         UserModel userModel = UserModel(
           username: username,
           uid: user.user!.uid,
@@ -78,5 +78,9 @@ class AuthMethods {
         await _firestore.collection('users').doc(currentUser.uid).get();
     UserModel user = UserModel.fromMap(snap.data() as Map<String, dynamic>);
     return user;
+  }
+
+  signOut() async {
+    await _auth.signOut();
   }
 }

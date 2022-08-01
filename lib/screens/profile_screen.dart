@@ -1,11 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:insta_clone/resources/auth_methods.dart';
 import 'package:insta_clone/resources/firestore_methods.dart';
+import 'package:insta_clone/screens/login_screen.dart';
 import 'package:insta_clone/utils/colors.dart';
 import 'package:insta_clone/utils/utils.dart';
 import 'package:insta_clone/widgets/follow_button.dart';
@@ -142,7 +142,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     backgroundColor: Colors.grey.shade900,
                                     borderColor: Colors.grey.shade900,
                                     textColor: Colors.white,
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      await AuthMethods().signOut();
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const LoginScreen(),
+                                          ),
+                                          (route) => false);
+                                    },
                                   )
                                 : isFollowing
                                     ? FollowButton(
@@ -163,8 +171,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       )
                                     : FollowButton(
                                         label: 'Follow',
-                                        backgroundColor: primaryColor,
-                                        borderColor: primaryColor,
+                                        backgroundColor: blueColor,
+                                        borderColor: blueColor,
                                         textColor: Colors.white,
                                         onPressed: () async {
                                           await FirestoreMethods().followUser(
@@ -209,13 +217,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       itemBuilder: (context, index) {
                         var data = snapshot.data!.docs[index];
-                        return Container(
-                          child: Image(
-                            image: NetworkImage(
-                              data['postUrl'],
-                            ),
-                            fit: BoxFit.cover,
+                        return Image(
+                          image: NetworkImage(
+                            data['postUrl'],
                           ),
+                          fit: BoxFit.cover,
                         );
                       },
                     );

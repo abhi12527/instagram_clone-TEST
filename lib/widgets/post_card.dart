@@ -236,7 +236,7 @@ class _PostCardState extends State<PostCard> {
                   onTap: () {},
                   child: Text(
                     'View all $commentLength Comments',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       color: secondaryColor,
                     ),
@@ -310,7 +310,7 @@ class _PostCardState extends State<PostCard> {
                                       ),
                                       child: Text(
                                         e,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 16,
                                         ),
                                       ),
