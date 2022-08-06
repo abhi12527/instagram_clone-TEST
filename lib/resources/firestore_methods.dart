@@ -3,6 +3,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/activity.dart';
 import '/models/comment.dart';
 import '/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
@@ -42,12 +43,33 @@ class FirestoreMethods {
     return res;
   }
 
-  likePost(String postId, String uid, List likes) async {
+  likePost(
+    String postId,
+    String uid,
+    String profilePic,
+    String name,
+    String postUrl,
+    String posterUid,
+    List likes,
+  ) async {
     try {
       if (likes.contains(uid)) {
         await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayRemove([uid])
         });
+        Activity activity = Activity(
+          profilePic: profilePic,
+          postUrl: postUrl,
+          uid: uid,
+          name: name,
+          datePublished: DateTime.now().toString(),
+          isLike: true,
+        );
+        await _firestore
+            .collection('users')
+            .doc(posterUid)
+            .collection('activity')
+            .add(activity.toMap());
       } else {
         await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayUnion([uid])
@@ -64,24 +86,40 @@ class FirestoreMethods {
     String uid,
     String name,
     String profilePic,
+    String postUrl,
+    String posterUId,
   ) async {
     try {
       if (text.isNotEmpty) {
         String commentId = const Uuid().v1();
         Comment comment = Comment(
-            profilePic: profilePic,
-            text: text,
-            uid: uid,
-            name: name,
-            commentId: commentId,
-            datePublished: DateTime.now().toString(),
-            likes: []);
+          profilePic: profilePic,
+          text: text,
+          uid: uid,
+          name: name,
+          commentId: commentId,
+          datePublished: DateTime.now().toString(),
+          likes: [],
+        );
         await _firestore
             .collection('posts')
             .doc(postId)
             .collection('comments')
             .doc(commentId)
             .set(comment.toMap());
+        Activity activity = Activity(
+          profilePic: profilePic,
+          postUrl: postUrl,
+          uid: uid,
+          name: name,
+          datePublished: DateTime.now().toString(),
+          isLike: false,
+        );
+        await _firestore
+            .collection('users')
+            .doc(posterUId)
+            .collection('activity')
+            .add(activity.toMap());
       } else {
         print('Text is Empty');
       }
@@ -136,14 +174,14 @@ class FirestoreMethods {
           'follower': FieldValue.arrayRemove([uid])
         });
         await _firestore.collection('users').doc(uid).update({
-          'follower': FieldValue.arrayRemove([followId])
+          'following': FieldValue.arrayRemove([followId])
         });
       } else {
         await _firestore.collection('users').doc(followId).update({
           'follower': FieldValue.arrayUnion([uid])
         });
         await _firestore.collection('users').doc(uid).update({
-          'follower': FieldValue.arrayUnion([followId])
+          'following': FieldValue.arrayUnion([followId])
         });
       }
     } catch (e) {

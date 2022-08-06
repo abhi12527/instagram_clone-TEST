@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +12,7 @@ import '/resources/firestore_methods.dart';
 import '/screens/comment_screen.dart';
 import '/utils/colors.dart';
 import '/utils/global_vairable.dart';
+import '/utils/utils.dart';
 import '/widgets/like_animation.dart';
 
 class PostCard extends StatefulWidget {
@@ -30,6 +30,21 @@ class _PostCardState extends State<PostCard> {
   void initState() {
     super.initState();
     getComment();
+    getPost();
+  }
+
+  var postUrl;
+  var posterUId;
+
+  getPost() async {
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(widget.post['postId'])
+        .get()
+        .then((value) {
+      postUrl = value.data()!['postUrl'];
+      posterUId = value.data()!['uid'];
+    });
   }
 
   getComment() async {
@@ -97,6 +112,10 @@ class _PostCardState extends State<PostCard> {
               await FirestoreMethods().likePost(
                 widget.post['postId'],
                 user.uid,
+                user.photoUrl,
+                user.username,
+                postUrl,
+                posterUId,
                 widget.post['likes'],
               );
               setState(() {
@@ -156,6 +175,10 @@ class _PostCardState extends State<PostCard> {
                     await FirestoreMethods().likePost(
                       widget.post['postId'],
                       user.uid,
+                      user.photoUrl,
+                      user.username,
+                      postUrl,
+                      posterUId,
                       widget.post['likes'],
                     );
                   },

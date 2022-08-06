@@ -4,6 +4,9 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../provider/user_provider.dart';
 import '/models/user.dart';
 import '/resources/storage_methods.dart';
 
@@ -20,17 +23,17 @@ class AuthMethods {
     String res = 'Some error Occurred';
 
     try {
-      if (email.isNotEmpty ||
-          password.isNotEmpty ||
-          username.isNotEmpty ||
-          bio.isNotEmpty ||
+      if (email.isNotEmpty &&
+          password.isNotEmpty &&
+          username.isNotEmpty &&
+          bio.isNotEmpty &&
           file != null) {
         UserCredential user = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
         String photoUrl = await StorageMethods()
-            .uploadImageToStorage('profilePics', file!, false);
+            .uploadImageToStorage('profilePics', file, false);
         res = 'success';
         UserModel userModel = UserModel(
           username: username,
@@ -58,6 +61,7 @@ class AuthMethods {
     String res = 'Some error Occurred';
     try {
       if (email.isNotEmpty || password.isNotEmpty) {
+
         await _auth.signInWithEmailAndPassword(
           email: email,
           password: password,
@@ -82,5 +86,11 @@ class AuthMethods {
 
   signOut() async {
     await _auth.signOut();
+  }
+
+  getUserData(BuildContext context) async {
+    UserProvider userProvider = Provider.of(context, listen: false)
+      ..refreshUser();
+    await userProvider.refreshUser();
   }
 }

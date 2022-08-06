@@ -20,6 +20,25 @@ class CommentsSceeen extends StatefulWidget {
 
 class _CommentsSceeenState extends State<CommentsSceeen> {
   final TextEditingController commentController = TextEditingController();
+  var postUrl;
+  var posterUId;
+  @override
+  void initState() {
+    super.initState();
+    getPost();
+  }
+
+  getPost() async {
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(widget.snap['postId'])
+        .get()
+        .then((value) {
+      postUrl = value.data()!['postUrl'];
+      posterUId = value.data()!['uid'];
+    });
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -100,6 +119,8 @@ class _CommentsSceeenState extends State<CommentsSceeen> {
                   user.uid,
                   user.username,
                   user.photoUrl,
+                  postUrl,
+                  posterUId,
                 );
                 setState(() {
                   commentController.text = '';

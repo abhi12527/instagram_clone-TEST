@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import '../provider/user_provider.dart';
-import 'package:provider/provider.dart';
 
 import '../utils/global_vairable.dart';
 
@@ -22,14 +20,8 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
   @override
   void initState() {
     super.initState();
-    addData();
   }
 
-  addData() async {
-    UserProvider userProvider = Provider.of(context, listen: false)
-      ..refreshUser();
-    await userProvider.refreshUser();
-  }
 
   @override
   Widget build(BuildContext context) {

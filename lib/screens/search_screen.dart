@@ -29,6 +29,10 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: mobileBackgroundColor,
+          leading: const SizedBox(
+            width: 0,
+            height: 0,
+          ),
           title: Row(
             children: [
               _isTyping
@@ -120,7 +124,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => ProfileScreen(
-                                uid: doc['uid'],
+                                doc['uid'],
                               ),
                             ),
                           );

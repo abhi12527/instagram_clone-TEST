@@ -36,8 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
     String res = await AuthMethods().loginUser(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim());
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
     setState(() {
       _isLoading = false;
     });

@@ -1,7 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '/utils/colors.dart';
-import '/utils/global_vairable.dart';
+import '../models/user.dart';
+import '../provider/user_provider.dart';
+import '../resources/auth_methods.dart';
+import '../screens/add_post_screen.dart';
+import '../screens/feed_screen.dart';
+import '../screens/notification_screen.dart';
+import '../screens/profile_screen.dart';
+import '../screens/search_screen.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
@@ -12,10 +21,12 @@ class MobileScreenLayout extends StatefulWidget {
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   int _page = 0;
+  UserModel? user;
   late PageController pageController;
   @override
   void initState() {
     super.initState();
+    AuthMethods().getUserData(context);
     pageController = PageController();
   }
 
@@ -37,14 +48,22 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
-    // UserModel user = Provider.of<UserProvider>(context).user;
+    user = Provider.of<UserProvider>(context).user;
+
+    List<Widget> homeScreenItems = <Widget>[
+      const FeedScreen(),
+      const SearchScreen(),
+      const AddPostScreen(),
+      const ActivityScreen(),
+      ProfileScreen('Current'),
+    ];
     return SafeArea(
       child: Scaffold(
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           onPageChanged: onPageChanged,
-          children:homeScreenItems,
+          children: homeScreenItems,
         ),
         bottomNavigationBar: CupertinoTabBar(
           backgroundColor: mobileBackgroundColor,
@@ -73,15 +92,20 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-             _page == 3 ?   Icons.favorite:Icons.favorite_border,
+                _page == 3 ? Icons.favorite : Icons.favorite_border,
                 color: _page == 3 ? primaryColor : secondaryColor,
               ),
               backgroundColor: primaryColor,
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-                color: _page == 4 ? primaryColor : secondaryColor,
+              // icon: Icon(
+              //   Icons.person,
+              //   color: _page == 4 ? primaryColor : secondaryColor,
+              // ),
+              icon: CircleAvatar(
+                radius: 13,
+                backgroundColor: Colors.grey,
+                backgroundImage: NetworkImage(user!.photoUrl),
               ),
               backgroundColor: primaryColor,
             ),

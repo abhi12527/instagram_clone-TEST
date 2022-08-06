@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, must_be_immutable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,8 +12,8 @@ import '/widgets/follow_button.dart';
 import 'package:readmore/readmore.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final String uid;
-  const ProfileScreen({Key? key, required this.uid}) : super(key: key);
+  String uid;
+  ProfileScreen(this.uid, {Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -28,6 +28,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isloading = false;
   @override
   void initState() {
+    if (widget.uid == 'Current') {
+      widget.uid = FirebaseAuth.instance.currentUser!.uid.toString();
+    }
     super.initState();
     getData();
   }
@@ -58,6 +61,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       _isloading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.uid = '';
   }
 
   @override
@@ -147,7 +156,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => const LoginScreen(),
+                                            builder: (context) =>
+                                                const LoginScreen(),
                                           ),
                                           (route) => false);
                                     },
