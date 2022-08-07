@@ -98,10 +98,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               backgroundColor: primaryColor,
             ),
             BottomNavigationBarItem(
-              // icon: Icon(
-              //   Icons.person,
-              //   color: _page == 4 ? primaryColor : secondaryColor,
-              // ),
               icon: CircleAvatar(
                 radius: 13,
                 backgroundColor: Colors.grey,

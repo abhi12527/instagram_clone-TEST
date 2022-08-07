@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../utils/global_vairable.dart';
 import '/resources/auth_methods.dart';
 import '/resources/firestore_methods.dart';
 import '/screens/login_screen.dart';
@@ -72,11 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return _isloading
-        ? const Center(
-            child: CircularProgressIndicator(
-              color: primaryColor,
-            ),
-          )
+        ? circularIndicator()
         : Scaffold(
             appBar: AppBar(
               backgroundColor: mobileBackgroundColor,
@@ -189,10 +186,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               FirebaseAuth
                                                   .instance.currentUser!.uid,
                                               userData['uid']);
-                                          setState(() {
-                                            isFollowing = true;
-                                            followers++;
-                                          });
+                                          setState(
+                                            () {
+                                              isFollowing = true;
+                                              followers++;
+                                            },
+                                          );
                                         },
                                       ),
                           ),
@@ -211,9 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                           snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return circularIndicator();
                     }
                     return GridView.builder(
                       shrinkWrap: true,

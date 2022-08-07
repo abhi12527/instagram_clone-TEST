@@ -7,7 +7,6 @@ import '../models/activity.dart';
 import '/models/comment.dart';
 import '/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
-
 import '../models/post.dart';
 
 class FirestoreMethods {

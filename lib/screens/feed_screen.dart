@@ -45,10 +45,7 @@ class _FeedScreenState extends State<FeedScreen> {
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-                child: CircularProgressIndicator(
-              color: primaryColor,
-            ));
+            return circularIndicator();
           } else if (snapshot.hasData) {
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,

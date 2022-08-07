@@ -26,15 +26,15 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
   int commentLength = 0;
+  var postUrl;
+  var posterUId;
+  
   @override
   void initState() {
     super.initState();
     getComment();
     getPost();
   }
-
-  var postUrl;
-  var posterUId;
 
   getPost() async {
     await FirebaseFirestore.instance

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 import 'package:intl/intl.dart';
 
+import '../utils/global_vairable.dart';
+
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({Key? key}) : super(key: key);
 
@@ -32,15 +34,13 @@ class ActivityScreenState extends State<ActivityScreen> {
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return circularIndicator();
           }
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               var doc = snapshot.data!.docs[index];
-              return ListTile(
+              var activityItem = ListTile(
                 leading: CircleAvatar(
                   backgroundColor: Colors.grey,
                   radius: 22,
@@ -81,6 +81,7 @@ class ActivityScreenState extends State<ActivityScreen> {
                   ),
                 ),
               );
+              return activityItem;
             },
           );
         },

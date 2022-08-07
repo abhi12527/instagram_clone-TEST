@@ -165,11 +165,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   color: blueColor,
                 ),
                 child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: primaryColor,
-                        ),
-                      )
+                    ? circularIndicator()
                     : const Text('Sign Up'),
               ),
             ),

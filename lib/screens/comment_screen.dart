@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../utils/global_vairable.dart';
 import '/models/user.dart';
 import '/provider/user_provider.dart';
 import '/resources/firestore_methods.dart';
@@ -63,11 +64,7 @@ class _CommentsSceeenState extends State<CommentsSceeen> {
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: primaryColor,
-              ),
-            );
+            return circularIndicator();
           }
           if (snapshot.hasData) {
             return ListView.builder(

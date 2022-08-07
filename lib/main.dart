@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'utils/global_vairable.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/user_provider.dart';
@@ -41,7 +42,6 @@ class MyApp extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
-        
               if (snapshot.hasData) {
                 return const ResponsiveLayout(
                   mobileScreenLayout: MobileScreenLayout(),
@@ -54,9 +54,7 @@ class MyApp extends StatelessWidget {
               }
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(color: primaryColor),
-              );
+              return circularIndicator();
             }
             return const LoginScreen();
           },
