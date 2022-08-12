@@ -50,7 +50,7 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() {
       _isLoading = true;
     });
-    String res = await AuthMethods().signUpUser(
+    List<String> res = await AuthMethods().signUpUser(
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
       username: _usernameController.text.trim(),
@@ -60,8 +60,8 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() {
       _isLoading = false;
     });
-    if (res != 'success') {
-      showSnackBar(res, context);
+    if (res[0] != 'success') {
+      showDialoguePop(context, res[0], res[1], 50);
     } else {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -164,9 +164,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   color: blueColor,
                 ),
-                child: _isLoading
-                    ? circularIndicator()
-                    : const Text('Sign Up'),
+                child: _isLoading ? circularIndicator() : const Text('Sign Up'),
               ),
             ),
             blankSpace(12),

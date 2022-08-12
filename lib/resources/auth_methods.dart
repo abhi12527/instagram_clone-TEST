@@ -21,7 +21,7 @@ class AuthMethods {
     required Uint8List? file,
   }) async {
     String res = 'Some error Occurred';
-
+    String errorDes = '';
     try {
       if (email.isNotEmpty &&
           password.isNotEmpty &&
@@ -49,31 +49,45 @@ class AuthMethods {
             .doc(user.user!.uid)
             .set(userModel.toMap());
       } else {
-        res = 'Input all the Fields';
+        res = 'Invalid Credentials';
+        errorDes =
+            "Please Try to enter all the fields and choose your profile image.";
       }
     } catch (error) {
       res = error.toString();
     }
-    return res;
+    return [res, errorDes];
   }
 
   loginUser({required String email, required String password}) async {
     String res = 'Some error Occurred';
+    String errorDes = '';
     try {
-      if (email.isNotEmpty || password.isNotEmpty) {
-
+      if (email.isNotEmpty && password.isNotEmpty) {
         await _auth.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
         res = 'success';
       } else {
-        res = "Please Enter all the Fields";
+        res = "Incorrect Username/Password";
+        errorDes =
+            "The username or password you entered doesn't appear to belong to an account. Please check your username and password and try again.";
       }
-    } catch (error) {
-      res = error.toString();
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'wrong-password') {
+        res = "Incorrect Password";
+        errorDes =
+            "The password you entered doesn't appear to belong to an account. Please check your password and try again.";
+      }
+      if (error.code == 'too-many-requests') {
+        res = "Incorrect Password";
+        errorDes =
+            "You've entered the wrong password too many times, try again later.";
+      }
+      print(error.code);
     }
-    return res;
+    return [res, errorDes];
   }
 
   Future<UserModel> getUserDetails() async {

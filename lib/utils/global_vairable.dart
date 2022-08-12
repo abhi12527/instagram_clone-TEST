@@ -20,3 +20,70 @@ circularIndicator() => const Center(
         color: primaryColor,
       ),
     );
+
+showDialoguePop(
+  BuildContext context,
+  String message,
+  String description, [
+  double height = 50,
+  double width = 50,
+  String action = 'Try Again',
+]) =>
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          actionsAlignment: MainAxisAlignment.end,
+          actionsPadding: EdgeInsets.zero,
+          buttonPadding: EdgeInsets.zero,
+          insetPadding: EdgeInsets.zero,
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                    child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: TextButton.styleFrom(primary: Colors.grey),
+                  child: Text(
+                    action,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                )),
+              ],
+            )
+          ],
+          title: Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          content: Container(
+            height: height,
+            width: width,
+            child: Column(
+              children: [
+                Text(
+                  textAlign: TextAlign.center,
+                  description,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );

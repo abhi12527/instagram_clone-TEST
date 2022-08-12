@@ -70,38 +70,68 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           onTap: navigationTapped,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(
-                _page == 0 ? Icons.home : Icons.home_outlined,
-                color: _page == 0 ? primaryColor : secondaryColor,
-              ),
+              icon: _page == 0
+                  ? Image.asset(
+                      'assets/images/home_filled.png',
+                      color: primaryColor,
+                      height: 20,
+                    )
+                  : Image.asset(
+                      'assets/images/home_unfilled.png',
+                      color: primaryColor,
+                      height: 20,
+                    ),
               backgroundColor: primaryColor,
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.search_rounded,
-                color: _page == 1 ? primaryColor : secondaryColor,
-              ),
+              icon: _page == 1
+                  ? Image.asset(
+                      'assets/images/search_bold.png',
+                      color: primaryColor,
+                      height: 20,
+                    )
+                  : Image.asset(
+                      'assets/images/search_light.png',
+                      color: primaryColor,
+                      height: 20,
+                    ),
               backgroundColor: primaryColor,
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.add_box_outlined,
-                color: _page == 2 ? primaryColor : secondaryColor,
-              ),
+              icon: _page == 2
+                  ? Image.asset(
+                      'assets/images/add_bold.png',
+                      color: primaryColor,
+                      height: 20,
+                    )
+                  : Image.asset(
+                      'assets/images/add_light.png',
+                      color: primaryColor,
+                      height: 20,
+                    ),
               backgroundColor: primaryColor,
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                _page == 3 ? Icons.favorite : Icons.favorite_border,
-                color: _page == 3 ? primaryColor : secondaryColor,
-              ),
+              icon: _page == 3
+                  ? Image.asset(
+                      'assets/images/heart_filled.png',
+                      color: primaryColor,
+                      height: 20,
+                    )
+                  : Image.asset(
+                      'assets/images/heart_outlined.png',
+                      color: primaryColor,
+                      height: 20,
+                    ),
               backgroundColor: primaryColor,
             ),
             BottomNavigationBarItem(
               icon: CircleAvatar(
                 radius: 13,
                 backgroundColor: Colors.grey,
-                backgroundImage: NetworkImage(user!.photoUrl),
+                backgroundImage: user!.photoUrl != null
+                    ? NetworkImage(user!.photoUrl, scale: 1)
+                    : null,
               ),
               backgroundColor: primaryColor,
             ),

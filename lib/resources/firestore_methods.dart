@@ -56,6 +56,7 @@ class FirestoreMethods {
         await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayRemove([uid])
         });
+      } else {
         Activity activity = Activity(
           profilePic: profilePic,
           postUrl: postUrl,
@@ -69,7 +70,6 @@ class FirestoreMethods {
             .doc(posterUid)
             .collection('activity')
             .add(activity.toMap());
-      } else {
         await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayUnion([uid])
         });

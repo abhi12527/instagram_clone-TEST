@@ -28,7 +28,17 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^2.2.7
+  flutter_launcher_icons: ^0.10.0
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/ic_instagram.png"
+
+flutter_native_splash:
+  color: "#1E1E1E"
+  image: "assets/images/ic_instagram.png"
 flutter:
   uses-material-design: true
   assets:

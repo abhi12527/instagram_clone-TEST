@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:insta_clone/screens/post_detail_screen.dart';
 import '../utils/global_vairable.dart';
 import '/resources/auth_methods.dart';
 import '/resources/firestore_methods.dart';
@@ -224,11 +225,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       itemBuilder: (context, index) {
                         var data = snapshot.data!.docs[index];
-                        return Image(
-                          image: NetworkImage(
-                            data['postUrl'],
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PostDetailScreen(post:data),
+                              ),
+                            );
+                          },
+                          child: Image(
+                            image: NetworkImage(
+                              data['postUrl'],
+                            ),
+                            fit: BoxFit.cover,
                           ),
-                          fit: BoxFit.cover,
                         );
                       },
                     );

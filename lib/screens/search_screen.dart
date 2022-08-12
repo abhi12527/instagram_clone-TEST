@@ -1,11 +1,17 @@
 // ignore_for_file: avoid_print
 
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:insta_clone/screens/post_detail_screen.dart';
 import '../utils/global_vairable.dart';
+import '../widgets/animated_dialogue.dart';
 import '/screens/profile_screen.dart';
 import '/utils/colors.dart';
+import 'comment_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -24,6 +30,119 @@ class _SearchScreenState extends State<SearchScreen> {
     searchController.dispose();
   }
 
+  late OverlayEntry _popupDialog;
+  OverlayEntry _createPopupDialog(var doc) {
+    return OverlayEntry(
+      builder: (context) => AnimatedDialog(
+        child: _createPopupContent(doc),
+      ),
+    );
+  }
+
+  Widget _createPopupContent(var doc) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Stack(
+          children: [
+            BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: 5.0,
+                sigmaY: 5.0,
+              ),
+              child: Container(),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _createPhotoTitle(doc),
+                    Container(
+                      constraints: const BoxConstraints(maxHeight: 500),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(doc['postUrl']),
+                        ),
+                      ),
+                      width: double.infinity,
+                      child: Image.network(
+                        doc['postUrl'],
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                    _createActionBar(doc),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+  Widget _createActionBar(var doc) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        color: Theme.of(context).primaryColor,
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Icon(
+                Icons.favorite_border,
+                color: Colors.white,
+              ),
+              GestureDetector(
+                child: SvgPicture.asset(
+                  commentIcon,
+                  color: Colors.white,
+                  height: 20,
+                ),
+                // onPanStart: (_) => Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => CommentsSceeen(
+                //       snap: doc,
+                //     ),
+                //   ),
+                // ),
+              ),
+              SvgPicture.asset(
+                sendIcon,
+                color: Colors.white,
+                height: 20,
+              ),
+              blankSpace(0, 5),
+              const Icon(
+                Icons.more_vert_rounded,
+                color: Colors.white,
+              )
+            ],
+          ),
+        ),
+      );
+  Widget _createPhotoTitle(var doc) => Container(
+        padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+        width: double.infinity,
+        color: Theme.of(context).primaryColor,
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 14,
+                backgroundColor: secondaryColor,
+                backgroundImage: NetworkImage(doc['profImage']),
+              ),
+              Text(
+                '   ${doc['username']}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -64,6 +183,12 @@ class _SearchScreenState extends State<SearchScreen> {
                     onTap: () {
                       setState(() {
                         _isTyping = true;
+                        _isShowUsers = true;
+                      });
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        _isShowUsers = true;
                       });
                     },
                     controller: searchController,
@@ -148,19 +273,43 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return circularIndicator();
                   }
-                  return StaggeredGridView.countBuilder(
-                    crossAxisCount: 3,
-                    itemCount: (snapshot.data! as dynamic).docs.length,
-                    itemBuilder: (context, index) => Image.network(
-                      (snapshot.data! as dynamic).docs[index]['postUrl'],
-                      fit: BoxFit.cover,
-                    ),
-                    staggeredTileBuilder: (index) => StaggeredTile.count(
-                      (index % 7 == 0) ? 2 : 1,
-                      (index % 7 == 0) ? 2 : 1,
-                    ),
-                    mainAxisSpacing: 8.0,
-                    crossAxisSpacing: 8.0,
+                  return Stack(
+                    children: [
+                      StaggeredGridView.countBuilder(
+                        crossAxisCount: 3,
+                        itemCount: (snapshot.data! as dynamic).docs.length,
+                        itemBuilder: (context, index) {
+                          var doc = (snapshot.data! as dynamic).docs[index];
+                          return GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PostDetailScreen(
+                                    post: (snapshot.data! as dynamic)
+                                        .docs[index]),
+                              ),
+                            ),
+
+                            onLongPress: () {
+                              _popupDialog = _createPopupDialog(doc);
+                              Overlay.of(context)!.insert(_popupDialog);
+                            },
+                            // remove the OverlayEntry from Overlay, so it would be hidden
+                            onLongPressEnd: (details) => _popupDialog.remove(),
+                            child: Image.network(
+                              doc['postUrl'],
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
+                        staggeredTileBuilder: (index) => StaggeredTile.count(
+                          (index % 7 == 0) ? 2 : 1,
+                          (index % 7 == 0) ? 2 : 1,
+                        ),
+                        mainAxisSpacing: 8.0,
+                        crossAxisSpacing: 8.0,
+                      ),
+                    ],
                   );
                 },
               ),

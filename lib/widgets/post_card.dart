@@ -23,17 +23,41 @@ class PostCard extends StatefulWidget {
   State<PostCard> createState() => _PostCardState();
 }
 
-class _PostCardState extends State<PostCard> {
+class _PostCardState extends State<PostCard>
+    with SingleTickerProviderStateMixin {
   bool isLikeAnimating = false;
   int commentLength = 0;
   var postUrl;
   var posterUId;
-  
+
+  late TransformationController controller;
+  late AnimationController animationController;
+  Animation<Matrix4>? animation;
+  OverlayEntry? entry;
+
   @override
   void initState() {
     super.initState();
+    controller = TransformationController();
+    animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200))
+          ..addListener(() {
+            controller.value = animation!.value;
+          })
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              removeOverlay();
+            }
+          });
     getComment();
     getPost();
+  }
+
+  @override
+  dispose() {
+    controller.dispose();
+    animationController.dispose();
+    super.dispose();
   }
 
   getPost() async {
@@ -109,6 +133,9 @@ class _PostCardState extends State<PostCard> {
           ),
           GestureDetector(
             onDoubleTap: () async {
+              setState(() {
+                isLikeAnimating = true;
+              });
               await FirestoreMethods().likePost(
                 widget.post['postId'],
                 user.uid,
@@ -118,37 +145,32 @@ class _PostCardState extends State<PostCard> {
                 posterUId,
                 widget.post['likes'],
               );
-              setState(() {
-                isLikeAnimating = true;
-              });
             },
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.35,
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(top: 3),
-                  child: Image.network(
-                    widget.post['postUrl'],
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 100),
-                  opacity: isLikeAnimating ? 1 : 0,
-                  child: LikeAnimation(
-                    isAnimating: isLikeAnimating,
-                    duration: const Duration(milliseconds: 200),
-                    onEnd: () {
-                      setState(() {
-                        isLikeAnimating = false;
-                      });
-                    },
-                    child: const Icon(
-                      Icons.favorite,
-                      color: Colors.white,
-                      size: 120,
+                buildImage(),
+                Visibility(
+                  visible: isLikeAnimating,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 100),
+                    opacity: isLikeAnimating ? 1 : 0,
+                    child: LikeAnimation(
+                      isAnimating: isLikeAnimating,
+                      duration: const Duration(
+                        milliseconds: 200,
+                      ),
+                      onEnd: () {
+                        setState(() {
+                          isLikeAnimating = false;
+                        });
+                      },
+                      child: Image.asset(
+                        'assets/images/heart_filled.png',
+                        color: Colors.white,
+                        height: 200,
+                        width: 200,
+                      ),
                     ),
                   ),
                 ),
@@ -163,13 +185,15 @@ class _PostCardState extends State<PostCard> {
                 smallLike: true,
                 child: _footerButton(
                   child: widget.post['likes'].contains(user.uid)
-                      ? const Icon(
-                          Icons.favorite,
+                      ? Image.asset(
+                          'assets/images/heart_filled.png',
                           color: Colors.red,
+                          height: 20,
                         )
-                      : const Icon(
-                          Icons.favorite_outline,
-                          color: Colors.white,
+                      : Image.asset(
+                          'assets/images/heart_outlined.png',
+                          color: primaryColor,
+                          height: 20,
                         ),
                   onPressed: () async {
                     await FirestoreMethods().likePost(
@@ -256,7 +280,14 @@ class _PostCardState extends State<PostCard> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CommentsSceeen(
+                        snap: widget.post,
+                      ),
+                    ),
+                  ),
                   child: Text(
                     'View all $commentLength Comments',
                     style: const TextStyle(
@@ -364,5 +395,51 @@ class _PostCardState extends State<PostCard> {
         child: child,
       ),
     );
+  }
+
+  void resetAnimation() {
+    animation = Matrix4Tween(begin: controller.value, end: Matrix4.identity())
+        .animate(
+            CurvedAnimation(parent: animationController, curve: Curves.ease));
+    animationController.forward(from: 0);
+  }
+
+  buildImage() {
+    return Builder(builder: (context) {
+      return InteractiveViewer(
+        transformationController: controller,
+        clipBehavior: Clip.none,
+        panEnabled: false,
+        onInteractionEnd: (details) {
+          resetAnimation();
+        },
+        onInteractionStart: (details) {
+          if (details.pointerCount < 2) return;
+
+          showOverlay(context);
+        },
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 400, maxHeight: 600),
+          width: double.infinity,
+          child: Image.network(
+            widget.post['postUrl'].toString(),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    });
+  }
+
+  showOverlay(BuildContext context) {
+    entry = OverlayEntry(builder: (context) {
+      return Positioned(child: buildImage());
+    });
+    final overlay = Overlay.of(context)!;
+    overlay.insert(entry!);
+  }
+
+  removeOverlay() {
+    entry?.remove();
+    entry = null;
   }
 }

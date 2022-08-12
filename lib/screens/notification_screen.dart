@@ -55,13 +55,16 @@ class ActivityScreenState extends State<ActivityScreen> {
                         fontSize: 14,
                       ),
                     ),
-                    Text(
-                      !doc['isLike']
-                          ? 'commented on your post'
-                          : 'liked your post',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        overflow: TextOverflow.ellipsis,
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.38,
+                      child: Text(
+                        !doc['isLike']
+                            ? 'commented on your post'
+                            : 'liked your post',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   ],

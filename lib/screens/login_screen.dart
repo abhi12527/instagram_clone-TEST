@@ -35,15 +35,15 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
-    String res = await AuthMethods().loginUser(
+    List<String> res = await AuthMethods().loginUser(
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
     );
     setState(() {
       _isLoading = false;
     });
-    if (res != 'success') {
-      showSnackBar(res, context);
+    if (res[0] != 'success') {
+      showDialoguePop(context, res[0], res[1], 85);
     } else {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -108,9 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   color: blueColor,
                 ),
-                child: _isLoading
-                    ? circularIndicator()
-                    : const Text('Login'),
+                child: _isLoading ? circularIndicator() : const Text('Login'),
               ),
             ),
             blankSpace(12),
@@ -118,7 +116,12 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: const Text("Don't have an account?"),
+                child: const Text(
+                  "Don't have an account? ",
+                  style: TextStyle(
+                    color: secondaryColor,
+                  ),
+                ),
               ),
               GestureDetector(
                 onTap: navigateToSignUp,
