@@ -54,8 +54,17 @@ class AuthMethods {
         errorDes =
             "Please Try to enter all the fields and choose your profile image.";
       }
-    } catch (error) {
-      res = error.toString();
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'email-already-in-use') {
+        res = 'Email Already In Use';
+        errorDes =
+            "This email is already in use by another account. Try another email or login with this email.";
+      }
+      if (error.code == 'weak-password') {
+        res = 'Weak Password';
+        errorDes =
+            "Pick a strong password. Use a combination of at least six numbers, letters and special characters.";
+      }
     }
     return [res, errorDes];
   }
