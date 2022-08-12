@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import '../utils/colors.dart';
 import '../utils/global_vairable.dart';
 import '../widgets/post_card.dart';

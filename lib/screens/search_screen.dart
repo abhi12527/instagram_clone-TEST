@@ -6,12 +6,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:insta_clone/screens/post_detail_screen.dart';
-import '../utils/global_vairable.dart';
-import '../widgets/animated_dialogue.dart';
+
+import '/screens/post_detail_screen.dart';
 import '/screens/profile_screen.dart';
 import '/utils/colors.dart';
-import 'comment_screen.dart';
+import '../utils/global_vairable.dart';
+import '../widgets/animated_dialogue.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);

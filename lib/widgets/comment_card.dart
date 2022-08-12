@@ -1,12 +1,13 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
-import '/models/user.dart';
-import '/provider/user_provider.dart';
-import '/resources/firestore_methods.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
+
+import '/models/user.dart';
+import '/provider/user_provider.dart';
+import '/resources/firestore_methods.dart';
 import '../utils/colors.dart';
 
 class CommentCard extends StatefulWidget {

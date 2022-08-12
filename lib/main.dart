@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'utils/global_vairable.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/user_provider.dart';
@@ -12,6 +11,7 @@ import 'responsive/web_screen_layout.dart';
 import 'screens/login_screen.dart';
 import 'utils/colors.dart';
 import 'utils/firebase_options.dart';
+import 'utils/global_vairable.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

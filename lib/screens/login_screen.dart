@@ -2,15 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import '/resources/auth_methods.dart';
 import '/screens/signup_screen.dart';
-import '/utils/utils.dart';
+import '/utils/colors.dart';
+import '/widgets/text_field_input.dart';
 import '../responsive/mobile_screen_layout.dart';
 import '../responsive/responsive_layout.dart';
 import '../responsive/web_screen_layout.dart';
-import '/utils/colors.dart';
-import '/widgets/text_field_input.dart';
-
 import '../utils/global_vairable.dart';
 
 class LoginScreen extends StatefulWidget {

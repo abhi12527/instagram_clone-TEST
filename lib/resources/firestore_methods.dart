@@ -3,10 +3,11 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/activity.dart';
+import 'package:uuid/uuid.dart';
+
 import '/models/comment.dart';
 import '/resources/storage_methods.dart';
-import 'package:uuid/uuid.dart';
+import '../models/activity.dart';
 import '../models/post.dart';
 
 class FirestoreMethods {
