@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:insta_clone/screens/inbox_screen.dart';
 
 import '../utils/colors.dart';
 import '../utils/global_vairable.dart';
@@ -18,12 +20,13 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
         title: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12.0),
           child: SvgPicture.asset(
             'assets/images/ic_instagram.svg',
-            color: Colors.white,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? primaryColor
+                : Colors.black,
             height: 32,
           ),
         ),
@@ -31,10 +34,15 @@ class _FeedScreenState extends State<FeedScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => InboxScreen()));
+              },
               child: SvgPicture.asset(
                 sendIcon,
-                color: Colors.white,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? primaryColor
+                    : Colors.black,
                 height: 20,
               ),
             ),
@@ -46,7 +54,7 @@ class _FeedScreenState extends State<FeedScreen> {
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return circularIndicator();
+            return circularIndicator(context);
           } else if (snapshot.hasData) {
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,

@@ -40,6 +40,7 @@ class _CommentCardState extends State<CommentCard> {
             children: [
               CircleAvatar(
                 radius: 18,
+                backgroundColor: secondaryColor,
                 backgroundImage: NetworkImage(widget.comment['profilePic']),
               ),
               Padding(
@@ -127,6 +128,7 @@ class _CommentCardState extends State<CommentCard> {
               child: widget.comment['likes'].contains(user.uid)
                   ? const Icon(
                       Icons.favorite,
+                      color: Colors.red,
                       size: 15,
                     )
                   : const Icon(

@@ -18,11 +18,13 @@ class ActivityScreenState extends State<ActivityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
-        title: const Text(
+        title:  Text(
           'Activity',
           style: TextStyle(
             fontSize: 18,
+            color:  Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black
           ),
         ),
       ),
@@ -34,7 +36,7 @@ class ActivityScreenState extends State<ActivityScreen> {
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
-            return circularIndicator();
+            return circularIndicator(context);
           }
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,

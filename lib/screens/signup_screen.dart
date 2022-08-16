@@ -75,7 +75,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void navigateToLogin() {
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const LoginScreen(),
       ),
@@ -86,107 +86,122 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 32,
-        ),
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            blankFlex(1),
-            SvgPicture.asset(
-              'assets/images/ic_instagram.svg',
-              color: primaryColor,
-              height: 64,
-            ),
-            blankSpace(64),
-            Stack(
-              children: [
-                _image != null
-                    ? CircleAvatar(
-                        radius: 50,
-                        backgroundImage: MemoryImage(_image!),
-                      )
-                    : const CircleAvatar(
-                        radius: 50,
-                        backgroundImage:
-                            AssetImage('assets/images/user_default.jpg'),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 32,
+          ),
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              blankFlex(1),
+              SvgPicture.asset(
+                'assets/images/ic_instagram.svg',
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? primaryColor
+                    : Colors.black,
+                height: 64,
+              ),
+              blankSpace(64),
+              Stack(
+                children: [
+                  _image != null
+                      ? CircleAvatar(
+                          radius: 50,
+                          backgroundImage: MemoryImage(_image!),
+                        )
+                      : const CircleAvatar(
+                          radius: 50,
+                          backgroundImage:
+                              AssetImage('assets/images/user_default.jpg'),
+                        ),
+                  Positioned(
+                    bottom: -10,
+                    right: -10,
+                    child: IconButton(
+                      onPressed: selectImage,
+                      splashRadius: 25,
+                      icon: const Icon(
+                        Icons.add_a_photo_rounded,
                       ),
-                Positioned(
-                  bottom: -10,
-                  right: -10,
-                  child: IconButton(
-                    onPressed: selectImage,
-                    splashRadius: 25,
-                    icon: const Icon(
-                      Icons.add_a_photo_rounded,
                     ),
                   ),
-                ),
-              ],
-            ),
-            blankSpace(24),
-            TextFieldInput(
-              controller: _usernameController,
-              hintText: 'Enter Username',
-              textInputType: TextInputType.emailAddress,
-            ),
-            blankSpace(24),
-            TextFieldInput(
-              controller: _emailController,
-              hintText: 'Enter Email',
-              textInputType: TextInputType.emailAddress,
-            ),
-            blankSpace(24),
-            TextFieldInput(
-              controller: _passwordController,
-              hintText: 'Enter Password',
-              obscureText: true,
-              textInputType: TextInputType.text,
-            ),
-            blankSpace(24),
-            TextFieldInput(
-              controller: _bioController,
-              hintText: 'Enter your Bio',
-              textInputType: TextInputType.emailAddress,
-            ),
-            blankSpace(24),
-            InkWell(
-              onTap: _isLoading ? () {} : signUpUser,
-              child: Container(
-                width: double.infinity,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
+                ],
+              ),
+              blankSpace(24),
+              TextFieldInput(
+                controller: _usernameController,
+                hintText: 'Enter Username',
+                textInputType: TextInputType.emailAddress,
+              ),
+              blankSpace(24),
+              TextFieldInput(
+                controller: _emailController,
+                hintText: 'Enter Email',
+                textInputType: TextInputType.emailAddress,
+              ),
+              blankSpace(24),
+              TextFieldInput(
+                controller: _passwordController,
+                hintText: 'Enter Password',
+                obscureText: true,
+                textInputType: TextInputType.text,
+              ),
+              blankSpace(24),
+              TextFieldInput(
+                controller: _bioController,
+                hintText: 'Enter your Bio',
+                textInputType: TextInputType.emailAddress,
+              ),
+              blankSpace(24),
+              InkWell(
+                onTap: _isLoading ? () {} : signUpUser,
+                child: Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    color: blueColor,
                   ),
-                  color: blueColor,
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(color: Colors.white),
+                        )
+                      : Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
-                child: _isLoading ? circularIndicator() : const Text('Sign Up'),
               ),
-            ),
-            blankSpace(12),
-            blankFlex(2),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: const Text("Don't have an account?"),
-              ),
+              blankSpace(12),
+              blankFlex(2),
               GestureDetector(
                 onTap: navigateToLogin,
-                child: const Text(
-                  'Login.',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: const Text("Don't have an account?"),
+                    ),
+                    const Text(
+                      'Login.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              )
-            ]),
-          ],
+              ),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }

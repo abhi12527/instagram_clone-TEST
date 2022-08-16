@@ -6,13 +6,15 @@ import '../resources/auth_methods.dart';
 
 class UserProvider with ChangeNotifier {
   UserModel _user = UserModel(
-      username: 'username',
-      uid: 'uid',
-      email: 'email',
-      bio: 'bio',
-      photoUrl: 'photoUrl',
-      follower: [],
-      following: []);
+    username: 'username',
+    uid: 'uid',
+    email: 'email',
+    bio: 'bio',
+    photoUrl: 'photoUrl',
+    follower: [],
+    following: [],
+    status: 'status',
+  );
   final AuthMethods _authMethods = AuthMethods();
   UserModel get user => _user;
 

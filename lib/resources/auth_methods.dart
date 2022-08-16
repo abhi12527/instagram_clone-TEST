@@ -44,6 +44,7 @@ class AuthMethods {
           photoUrl: photoUrl,
           follower: [],
           following: [],
+            status: "Online"
         );
         await _firestore
             .collection('users')
@@ -94,6 +95,11 @@ class AuthMethods {
         res = "Incorrect Password";
         errorDes =
             "You've entered the wrong password too many times, try again later.";
+      }
+      if (error.code == 'user-not-found') {
+        res = "No Account Associated";
+        errorDes =
+            "Email you've entered is not associated with any account, try signing up or login with another credential.";
       }
       print(error.code);
     }

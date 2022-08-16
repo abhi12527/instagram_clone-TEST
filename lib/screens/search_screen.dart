@@ -80,21 +80,27 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       );
   Widget _createActionBar(var doc) => Container(
+        color: Theme.of(context).brightness == Brightness.dark
+            ? secondaryColor
+            : Colors.white,
         padding: const EdgeInsets.symmetric(vertical: 5.0),
-        color: Theme.of(context).primaryColor,
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const Icon(
+              Icon(
                 Icons.favorite_border,
-                color: Colors.white,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
               ),
               GestureDetector(
                 child: SvgPicture.asset(
                   commentIcon,
-                  color: Colors.white,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
                   height: 20,
                 ),
                 // onPanStart: (_) => Navigator.push(
@@ -108,22 +114,28 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               SvgPicture.asset(
                 sendIcon,
-                color: Colors.white,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
                 height: 20,
               ),
               blankSpace(0, 5),
-              const Icon(
+              Icon(
                 Icons.more_vert_rounded,
-                color: Colors.white,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
               )
             ],
           ),
         ),
       );
   Widget _createPhotoTitle(var doc) => Container(
+        color: Theme.of(context).brightness == Brightness.dark
+            ? secondaryColor
+            : Colors.white,
         padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
         width: double.infinity,
-        color: Theme.of(context).primaryColor,
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Row(
@@ -148,76 +160,86 @@ class _SearchScreenState extends State<SearchScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: mobileBackgroundColor,
+          backgroundColor: Theme.of(context).brightness == Brightness.dark
+              ? Colors.black
+              : Colors.white,
           // leading: const SizedBox(
           //   width: 0,
           //   height: 0,
           // ),
-          title: Row(
-            children: [
-              _isTyping
-                  ? Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 12),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isTyping = false;
-                            _isShowUsers = false;
-                            searchController.text = '';
-                          });
-                        },
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.grey,
+          title: Container(
+            child: Row(
+              children: [
+                _isTyping
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 12),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isTyping = false;
+                              _isShowUsers = false;
+                              searchController.text = '';
+                            });
+                          },
+                          child: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                    )
-                  : Container(),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 12,
-                  ),
-                  child: TextFormField(
-                    onTap: () {
-                      setState(() {
-                        _isTyping = true;
-                        _isShowUsers = true;
-                      });
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        _isShowUsers = true;
-                      });
-                    },
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      prefixIcon: !_isTyping
-                          ? const Icon(
-                              Icons.search,
-                              color: Colors.white,
-                            )
-                          : null,
-                      fillColor: Colors.grey.shade900,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.all(8),
+                      )
+                    : Container(),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20,
+                      horizontal: 12,
                     ),
-                    style: const TextStyle(fontSize: 14),
-                    onFieldSubmitted: (_) {
-                      setState(() {
-                        _isShowUsers = true;
-                      });
-                    },
+                    child: TextFormField(
+                      onTap: () {
+                        setState(() {
+                          _isTyping = true;
+                          _isShowUsers = true;
+                        });
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          _isShowUsers = true;
+                        });
+                      },
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                        prefixIcon: !_isTyping
+                            ? Icon(
+                                Icons.search,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.white
+                                    : Colors.black,
+                              )
+                            : null,
+                        fillColor:
+                            Theme.of(context).brightness == Brightness.dark
+                                ? Colors.grey.shade900
+                                : Colors.grey.shade300,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: const EdgeInsets.all(8),
+                      ),
+                      style: const TextStyle(fontSize: 14),
+                      onFieldSubmitted: (_) {
+                        setState(() {
+                          _isShowUsers = true;
+                        });
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         body: _isShowUsers
@@ -232,10 +254,10 @@ class _SearchScreenState extends State<SearchScreen> {
                         snapshot) {
                   print(snapshot);
                   if (!snapshot.hasData) {
-                    return circularIndicator();
+                    return circularIndicator(context);
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return circularIndicator();
+                    return circularIndicator(context);
                   }
                   return ListView.builder(
                     itemCount: snapshot.data!.docs.length,
@@ -268,10 +290,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                         snapshot) {
                   if (!snapshot.hasData) {
-                    return circularIndicator();
+                    return circularIndicator(context);
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return circularIndicator();
+                    return circularIndicator(context);
                   }
                   return Stack(
                     children: [

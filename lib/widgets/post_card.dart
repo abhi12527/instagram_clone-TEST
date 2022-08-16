@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/message_screen.dart';
 import '/models/user.dart';
 import '/provider/user_provider.dart';
 import '/resources/firestore_methods.dart';
@@ -90,7 +91,9 @@ class _PostCardState extends State<PostCard>
   Widget build(BuildContext context) {
     final UserModel user = Provider.of<UserProvider>(context).user;
     return Container(
-      color: mobileBackgroundColor,
+      color: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black
+          : Colors.white,
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         children: [
@@ -102,7 +105,10 @@ class _PostCardState extends State<PostCard>
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage(widget.post['profImage']),
+                  backgroundColor: secondaryColor,
+                  backgroundImage: NetworkImage(
+                    widget.post['profImage'],
+                  ),
                 ),
                 Expanded(
                   child: Padding(
@@ -150,27 +156,26 @@ class _PostCardState extends State<PostCard>
               alignment: Alignment.center,
               children: [
                 buildImage(),
-                Visibility(
-                  visible: isLikeAnimating,
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 100),
-                    opacity: isLikeAnimating ? 1 : 0,
-                    child: LikeAnimation(
-                      isAnimating: isLikeAnimating,
-                      duration: const Duration(
-                        milliseconds: 200,
-                      ),
-                      onEnd: () {
-                        setState(() {
-                          isLikeAnimating = false;
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/images/heart_filled.png',
-                        color: Colors.white,
-                        height: 200,
-                        width: 200,
-                      ),
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 100),
+                  opacity: isLikeAnimating ? 1 : 0,
+                  child: LikeAnimation(
+                    isAnimating: isLikeAnimating,
+                    duration: const Duration(
+                      milliseconds: 200,
+                    ),
+                    onEnd: () {
+                      setState(() {
+                        isLikeAnimating = false;
+                      });
+                    },
+                    child: Image.asset(
+                      'assets/images/heart_filled.png',
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black
+                          : Colors.white,
+                      height: 200,
+                      width: 200,
                     ),
                   ),
                 ),
@@ -192,7 +197,9 @@ class _PostCardState extends State<PostCard>
                         )
                       : Image.asset(
                           'assets/images/heart_outlined.png',
-                          color: primaryColor,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black,
                           height: 20,
                         ),
                   onPressed: () async {
@@ -211,7 +218,9 @@ class _PostCardState extends State<PostCard>
               _footerButton(
                 child: SvgPicture.asset(
                   commentIcon,
-                  color: Colors.white,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
                   height: 20,
                 ),
                 onPressed: () => Navigator.push(
@@ -226,10 +235,20 @@ class _PostCardState extends State<PostCard>
               _footerButton(
                 child: SvgPicture.asset(
                   sendIcon,
-                  color: Colors.white,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
                   height: 20,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MessageScreen(
+                        user: posterUId,
+                      ),
+                    ),
+                  );
+                },
               ),
               Expanded(
                 child: Align(
@@ -271,11 +290,23 @@ class _PostCardState extends State<PostCard>
                         children: [
                           TextSpan(
                             text: widget.post['username'] + ' ',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
-                          TextSpan(text: widget.post['description'])
+                          TextSpan(
+                            text: widget.post['description'],
+                            style: TextStyle(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          )
                         ]),
                   ),
                 ),
@@ -421,6 +452,7 @@ class _PostCardState extends State<PostCard>
         child: Container(
           constraints: const BoxConstraints(minHeight: 400, maxHeight: 600),
           width: double.infinity,
+          color: secondaryColor,
           child: Image.network(
             widget.post['postUrl'].toString(),
             fit: BoxFit.cover,

@@ -35,8 +35,24 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Instagram',
-        theme: ThemeData.dark().copyWith(
+        theme: ThemeData.light().copyWith(
+          scaffoldBackgroundColor: Colors.white,
+          appBarTheme: const AppBarTheme(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(
+              color: mobileBackgroundColor,
+            ),
+          ),
+        ),
+        darkTheme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: mobileBackgroundColor,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: mobileBackgroundColor,
+            iconTheme: IconThemeData(
+              color: Colors.white,
+            ),
+          ),
         ),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
@@ -54,7 +70,7 @@ class MyApp extends StatelessWidget {
               }
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return circularIndicator();
+              return circularIndicator(context);
             }
             return const LoginScreen();
           },

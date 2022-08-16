@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'colors.dart';
-
 const webScreenWidth = 600;
 const sendIcon = 'assets/images/send.svg';
 const commentIcon = 'assets/images/comment.svg';
@@ -16,9 +14,11 @@ blankFlex([flex = 1]) => Flexible(
       child: Container(),
     );
 
-circularIndicator() => const Center(
+circularIndicator(BuildContext context) => Center(
       child: CircularProgressIndicator(
-        color: primaryColor,
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white
+            : Colors.black,
       ),
     );
 
@@ -49,10 +49,12 @@ showDialoguePop(
                   style: TextButton.styleFrom(primary: Colors.grey),
                   child: Text(
                     action,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
-                      color: Colors.white,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ),
                 )),
@@ -62,14 +64,14 @@ showDialoguePop(
           title: Text(
             message,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
           ),
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0))),
-          content: Container(
+          content: SizedBox(
             height: height,
             width: width,
             child: Column(
@@ -77,7 +79,7 @@ showDialoguePop(
                 Text(
                   textAlign: TextAlign.center,
                   description,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     color: Colors.grey,
                   ),

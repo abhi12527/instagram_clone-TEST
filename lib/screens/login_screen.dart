@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:insta_clone/screens/forgot_screen.dart';
 
+import '../resources/firestore_methods.dart';
 import '/resources/auth_methods.dart';
 import '/screens/signup_screen.dart';
 import '/utils/colors.dart';
@@ -44,6 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
     if (res[0] != 'success') {
       showDialoguePop(context, res[0], res[1], 85);
     } else {
+      FirestoreMethods().updateStatus('Online');
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const ResponsiveLayout(
@@ -56,9 +60,17 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void navigateToSignUp() {
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const SignupScreen(),
+      ),
+    );
+  }
+
+  void navigateToForgotPassword() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const ForgotScreen(),
       ),
     );
   }
@@ -78,7 +90,9 @@ class _LoginScreenState extends State<LoginScreen> {
             blankFlex(1),
             SvgPicture.asset(
               'assets/images/ic_instagram.svg',
-              color: primaryColor,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? primaryColor
+                  : Colors.black,
               height: 64,
             ),
             blankSpace(64),
@@ -107,31 +121,72 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   color: blueColor,
                 ),
-                child: _isLoading ? circularIndicator() : const Text('Login'),
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      )
+                    : Text(
+                        'Login',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+              ),
+            ),
+            GestureDetector(
+              onTap: navigateToForgotPassword,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Forgot your login details? ',
+                      style: TextStyle(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey.shade500
+                            : Colors.grey.shade500,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      'Get help logging in.',
+                      style: TextStyle(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             blankSpace(12),
             blankFlex(2),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: const Text(
-                  "Don't have an account? ",
-                  style: TextStyle(
-                    color: secondaryColor,
+            const Divider(),
+            GestureDetector(
+              onTap: navigateToSignUp,
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: const Text(
+                    "Don't have an account? ",
+                    style: TextStyle(
+                      color: secondaryColor,
+                    ),
                   ),
                 ),
-              ),
-              GestureDetector(
-                onTap: navigateToSignUp,
-                child: const Text(
+                const Text(
                   'Sign up.',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              )
-            ]),
+              ]),
+            ),
           ],
         ),
       )),

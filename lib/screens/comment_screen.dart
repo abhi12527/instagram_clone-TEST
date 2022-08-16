@@ -51,9 +51,18 @@ class _CommentsSceeenState extends State<CommentsSceeen> {
     final UserModel user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
-        title: const Text('Comments'),
+        title: Text(
+          'Comments',
+          style: TextStyle(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white
+                : Colors.black,
+          ),
+        ),
       ),
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black
+          : Colors.white,
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('posts')
@@ -64,7 +73,7 @@ class _CommentsSceeenState extends State<CommentsSceeen> {
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return circularIndicator();
+            return circularIndicator(context);
           }
           if (snapshot.hasData) {
             return ListView.builder(

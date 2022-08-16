@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:insta_clone/screens/message_screen.dart';
 import 'package:readmore/readmore.dart';
 
 import '/resources/auth_methods.dart';
@@ -75,11 +76,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return _isloading
-        ? circularIndicator()
+        ? circularIndicator(context)
         : Scaffold(
             appBar: AppBar(
-              backgroundColor: mobileBackgroundColor,
-              title: Text(userData['username']),
+              title: Text(
+                userData['username'],
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              ),
               centerTitle: false,
             ),
             body: ListView(
@@ -147,11 +154,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     widget.uid
                                 ? FollowButton(
                                     label: 'Sign-Out',
-                                    backgroundColor: Colors.grey.shade900,
-                                    borderColor: Colors.grey.shade900,
-                                    textColor: Colors.white,
+                                    backgroundColor:
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.grey.shade900
+                                            : Colors.grey.shade300,
+                                    borderColor: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.grey.shade900
+                                        : Colors.grey.shade300,
+                                    textColor: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : Colors.black,
                                     onPressed: () async {
+                                      await FirestoreMethods()
+                                          .updateStatus('Offline');
                                       await AuthMethods().signOut();
+
                                       Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
@@ -162,21 +182,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     },
                                   )
                                 : isFollowing
-                                    ? FollowButton(
-                                        label: 'Unfollow',
-                                        backgroundColor: Colors.grey.shade900,
-                                        borderColor: Colors.grey.shade900,
-                                        textColor: Colors.white,
-                                        onPressed: () async {
-                                          await FirestoreMethods().followUser(
-                                              FirebaseAuth
-                                                  .instance.currentUser!.uid,
-                                              userData['uid']);
-                                          setState(() {
-                                            isFollowing = false;
-                                            followers--;
-                                          });
-                                        },
+                                    ? Row(
+                                        children: [
+                                          Expanded(
+                                            child: FollowButton(
+                                              label: 'Unfollow',
+                                              backgroundColor: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.grey.shade900
+                                                  : Colors.grey.shade300,
+                                              borderColor: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.grey.shade900
+                                                  : Colors.grey.shade300,
+                                              textColor: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              onPressed: () async {
+                                                await FirestoreMethods()
+                                                    .followUser(
+                                                        FirebaseAuth.instance
+                                                            .currentUser!.uid,
+                                                        userData['uid']);
+                                                setState(() {
+                                                  isFollowing = false;
+                                                  followers--;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: FollowButton(
+                                              label: 'Message',
+                                              backgroundColor: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.grey.shade900
+                                                  : Colors.grey.shade300,
+                                              borderColor: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.grey.shade900
+                                                  : Colors.grey.shade300,
+                                              textColor: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              onPressed: () async {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MessageScreen(
+                                                      user: userData['uid'],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
                                       )
                                     : FollowButton(
                                         label: 'Follow',
@@ -212,7 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                           snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return circularIndicator();
+                      return circularIndicator(context);
                     }
                     return GridView.builder(
                       shrinkWrap: true,

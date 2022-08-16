@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:insta_clone/resources/firestore_methods.dart';
 import 'package:provider/provider.dart';
 
 import '/utils/colors.dart';
@@ -19,21 +20,34 @@ class MobileScreenLayout extends StatefulWidget {
   State<MobileScreenLayout> createState() => _MobileScreenLayoutState();
 }
 
-class _MobileScreenLayoutState extends State<MobileScreenLayout> {
+class _MobileScreenLayoutState extends State<MobileScreenLayout>
+    with WidgetsBindingObserver {
   int _page = 0;
   UserModel? user;
   late PageController pageController;
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     AuthMethods().getUserData(context);
     pageController = PageController();
+    FirestoreMethods().updateStatus('Online');
   }
 
   @override
   void dispose() {
     super.dispose();
     pageController.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      FirestoreMethods().updateStatus('Online');
+    } else {
+      FirestoreMethods().updateStatus('Offline');
+    }
+    super.didChangeAppLifecycleState(state);
   }
 
   void navigationTapped(int page) {
@@ -53,90 +67,106 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     List<Widget> homeScreenItems = <Widget>[
       const FeedScreen(),
       const SearchScreen(),
-      const AddPostScreen(),
+      AddPostScreen(navigate: navigationTapped),
       const ActivityScreen(),
       ProfileScreen('Current'),
     ];
-    return SafeArea(
-      child: Scaffold(
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController,
-          onPageChanged: onPageChanged,
-          children: homeScreenItems,
-        ),
-        bottomNavigationBar: CupertinoTabBar(
-          backgroundColor: mobileBackgroundColor,
-          onTap: navigationTapped,
-          items: [
-            BottomNavigationBarItem(
-              icon: _page == 0
-                  ? Image.asset(
-                      'assets/images/home_filled.png',
-                      color: primaryColor,
-                      height: 20,
-                    )
-                  : Image.asset(
-                      'assets/images/home_unfilled.png',
-                      color: primaryColor,
-                      height: 20,
-                    ),
-              backgroundColor: primaryColor,
+    return Scaffold(
+      body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        children: homeScreenItems,
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? Colors.black
+            : Colors.white,
+        onTap: navigationTapped,
+        items: [
+          BottomNavigationBarItem(
+            icon: _page == 0
+                ? Image.asset(
+                    'assets/images/home_filled.png',
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                    height: 20,
+                  )
+                : Image.asset(
+                    'assets/images/home_unfilled.png',
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                    height: 20,
+                  ),
+            backgroundColor: primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: _page == 1
+                ? Image.asset(
+                    'assets/images/search_bold.png',
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                    height: 20,
+                  )
+                : Image.asset(
+                    'assets/images/search_light.png',
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                    height: 20,
+                  ),
+            backgroundColor: primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: _page == 2
+                ? Image.asset(
+                    'assets/images/add_bold.png',
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                    height: 20,
+                  )
+                : Image.asset(
+                    'assets/images/add_light.png',
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                    height: 20,
+                  ),
+            backgroundColor: primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: _page == 3
+                ? Image.asset(
+                    'assets/images/heart_filled.png',
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                    height: 20,
+                  )
+                : Image.asset(
+                    'assets/images/heart_outlined.png',
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                    height: 20,
+                  ),
+            backgroundColor: primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: CircleAvatar(
+              radius: 13,
+              backgroundColor: Colors.grey,
+              backgroundImage: user!.photoUrl != null
+                  ? NetworkImage(user!.photoUrl, scale: 1)
+                  : null,
             ),
-            BottomNavigationBarItem(
-              icon: _page == 1
-                  ? Image.asset(
-                      'assets/images/search_bold.png',
-                      color: primaryColor,
-                      height: 20,
-                    )
-                  : Image.asset(
-                      'assets/images/search_light.png',
-                      color: primaryColor,
-                      height: 20,
-                    ),
-              backgroundColor: primaryColor,
-            ),
-            BottomNavigationBarItem(
-              icon: _page == 2
-                  ? Image.asset(
-                      'assets/images/add_bold.png',
-                      color: primaryColor,
-                      height: 20,
-                    )
-                  : Image.asset(
-                      'assets/images/add_light.png',
-                      color: primaryColor,
-                      height: 20,
-                    ),
-              backgroundColor: primaryColor,
-            ),
-            BottomNavigationBarItem(
-              icon: _page == 3
-                  ? Image.asset(
-                      'assets/images/heart_filled.png',
-                      color: primaryColor,
-                      height: 20,
-                    )
-                  : Image.asset(
-                      'assets/images/heart_outlined.png',
-                      color: primaryColor,
-                      height: 20,
-                    ),
-              backgroundColor: primaryColor,
-            ),
-            BottomNavigationBarItem(
-              icon: CircleAvatar(
-                radius: 13,
-                backgroundColor: Colors.grey,
-                backgroundImage: user!.photoUrl != null
-                    ? NetworkImage(user!.photoUrl, scale: 1)
-                    : null,
-              ),
-              backgroundColor: primaryColor,
-            ),
-          ],
-        ),
+            backgroundColor: primaryColor,
+          ),
+        ],
       ),
     );
   }

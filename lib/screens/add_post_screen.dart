@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:insta_clone/responsive/mobile_screen_layout.dart';
 import 'package:provider/provider.dart';
 
 import '/models/user.dart';
@@ -13,7 +14,8 @@ import '/utils/colors.dart';
 import '/utils/utils.dart';
 
 class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({Key? key}) : super(key: key);
+  final Function(int) navigate;
+  const AddPostScreen({Key? key, required this.navigate}) : super(key: key);
 
   @override
   State<AddPostScreen> createState() => _AddPostScreenState();
@@ -52,6 +54,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
           _isLoading = false;
         });
         showSnackBar(res, context);
+        widget.navigate(0);
       }
     } catch (e) {
       setState(() {
@@ -130,19 +133,31 @@ class _AddPostScreenState extends State<AddPostScreen> {
           )
         : Scaffold(
             appBar: AppBar(
-              backgroundColor: mobileBackgroundColor,
               leading: IconButton(
                 onPressed: clearImage,
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
                 ),
                 splashRadius: 25,
               ),
-              title: const Text('Post to'),
+              title: Text(
+                'Post to',
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              ),
               actions: [
                 TextButton(
-                  onPressed: () =>
-                      postImage(user.uid, user.username, user.photoUrl),
+                  onPressed: () => postImage(
+                    user.uid,
+                    user.username,
+                    user.photoUrl,
+                  ),
                   child: const Text(
                     'Post',
                     style: TextStyle(
@@ -157,7 +172,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
             body: Column(
               children: [
                 _isLoading
-                    ? const LinearProgressIndicator()
+                    ? LinearProgressIndicator(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black,
+                      )
                     : const Padding(padding: EdgeInsets.zero),
                 const Divider(),
                 Row(

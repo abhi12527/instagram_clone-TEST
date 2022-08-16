@@ -9,8 +9,9 @@ class UserModel {
     required this.photoUrl,
     required this.follower,
     required this.following,
+    required this.status,
   });
-
+  String status;
   String username;
   String uid;
   String email;
@@ -25,6 +26,7 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
         username: json["username"],
+        status: json["status"],
         uid: json["uid"],
         email: json["email"],
         bio: json["bio"],
@@ -34,6 +36,7 @@ class UserModel {
       );
 
   Map<String, dynamic> toMap() => {
+        "status": status,
         "username": username,
         "uid": uid,
         "email": email,
