@@ -7,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '/responsive/mobile_screen_layout.dart';
-import '/screens/login_screen.dart';
+import '/view/login_screen.dart';
 import '/utils/colors.dart';
 import '/utils/utils.dart';
 import '/widgets/text_field_input.dart';

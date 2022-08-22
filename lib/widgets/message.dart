@@ -1,19 +1,22 @@
 // ignore_for_file: override_on_non_overriding_member, must_be_immutable
 
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:insta_clone/screens/profile_screen.dart';
-import 'package:insta_clone/widgets/follow_button.dart';
+import '/view/profile_screen.dart';
+import '/widgets/follow_button.dart';
 
 import 'message_bubble.dart';
 
 class Messages extends StatelessWidget {
-  Messages({Key? key, required this.user, required this.userImage})
-      : super(key: key);
+  Messages({
+    Key? key,
+    required this.user,
+    required this.userImage,
+    required this.chatName,
+  }) : super(key: key);
   String user;
+  String chatName;
   final String userImage;
   @protected
   @mustCallSuper
@@ -43,6 +46,7 @@ class Messages extends StatelessWidget {
           );
         } else {
           if (snapShotChat.hasData) {
+            print(snapShotChat.data!.docs[0]['username']);
             return ListView.builder(
               reverse: true,
               itemCount: snapShotChat.data!.docs.length,
@@ -60,7 +64,7 @@ class Messages extends StatelessWidget {
                               height: 10,
                             ),
                             Text(
-                              snapShotChat.data!.docs[index]['username'],
+                             chatName,
                               style: TextStyle(
                                 color: Theme.of(context).brightness ==
                                         Brightness.dark

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 
 import '/models/user.dart';
-import '/provider/user_provider.dart';
+import '/controller/user_provider.dart';
 import '/resources/firestore_methods.dart';
 import '../utils/colors.dart';
 

@@ -1,10 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:insta_clone/models/user.dart';
-import 'package:insta_clone/provider/user_provider.dart';
-import 'package:insta_clone/utils/colors.dart';
-import 'package:insta_clone/utils/global_vairable.dart';
-import 'package:insta_clone/widgets/message.dart';
+import '/models/user.dart';
+import '/controller/user_provider.dart';
+import '/utils/colors.dart';
+import '/utils/global_vairable.dart';
 import 'package:provider/provider.dart';
 import 'message_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';

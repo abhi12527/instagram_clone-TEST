@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'provider/user_provider.dart';
+import 'controller/user_provider.dart';
 import 'responsive/mobile_screen_layout.dart';
 import 'responsive/responsive_layout.dart';
 import 'responsive/web_screen_layout.dart';
-import 'screens/login_screen.dart';
+import 'view/login_screen.dart';
 import 'utils/colors.dart';
 import 'utils/firebase_options.dart';
 import 'utils/global_vairable.dart';

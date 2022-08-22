@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:insta_clone/screens/forgot_screen.dart';
+import '/view/forgot_screen.dart';
 
 import '../resources/firestore_methods.dart';
 import '/resources/auth_methods.dart';
-import '/screens/signup_screen.dart';
+import '/view/signup_screen.dart';
 import '/utils/colors.dart';
 import '/widgets/text_field_input.dart';
 import '../responsive/mobile_screen_layout.dart';

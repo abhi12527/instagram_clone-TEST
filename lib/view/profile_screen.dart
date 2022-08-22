@@ -3,13 +3,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:insta_clone/screens/message_screen.dart';
+import '/view/message_screen.dart';
 import 'package:readmore/readmore.dart';
 
 import '/resources/auth_methods.dart';
 import '/resources/firestore_methods.dart';
-import '/screens/login_screen.dart';
-import '/screens/post_detail_screen.dart';
+import '/view/login_screen.dart';
+import '/view/post_detail_screen.dart';
 import '/utils/colors.dart';
 import '/utils/utils.dart';
 import '/widgets/follow_button.dart';

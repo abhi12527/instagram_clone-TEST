@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:insta_clone/screens/inbox_screen.dart';
+import 'inbox_screen.dart';
 
 import '../utils/colors.dart';
 import '../utils/global_vairable.dart';

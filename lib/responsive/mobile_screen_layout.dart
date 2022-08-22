@@ -5,13 +5,13 @@ import 'package:provider/provider.dart';
 
 import '/utils/colors.dart';
 import '../models/user.dart';
-import '../provider/user_provider.dart';
+import '../controller/user_provider.dart';
 import '../resources/auth_methods.dart';
-import '../screens/add_post_screen.dart';
-import '../screens/feed_screen.dart';
-import '../screens/notification_screen.dart';
-import '../screens/profile_screen.dart';
-import '../screens/search_screen.dart';
+import '../view/add_post_screen.dart';
+import '../view/feed_screen.dart';
+import '../view/notification_screen.dart';
+import '../view/profile_screen.dart';
+import '../view/search_screen.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);

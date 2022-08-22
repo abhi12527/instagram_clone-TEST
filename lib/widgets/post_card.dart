@@ -6,11 +6,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/message_screen.dart';
+import '../view/message_screen.dart';
 import '/models/user.dart';
-import '/provider/user_provider.dart';
+import '/controller/user_provider.dart';
 import '/resources/firestore_methods.dart';
-import '/screens/comment_screen.dart';
+import '/view/comment_screen.dart';
 import '/utils/colors.dart';
 import '/utils/global_vairable.dart';
 import '/utils/utils.dart';
@@ -171,9 +171,7 @@ class _PostCardState extends State<PostCard>
                     },
                     child: Image.asset(
                       'assets/images/heart_filled.png',
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.black
-                          : Colors.white,
+                      color:  Colors.white,
                       height: 200,
                       width: 200,
                     ),

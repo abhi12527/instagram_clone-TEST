@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '/screens/post_detail_screen.dart';
-import '/screens/profile_screen.dart';
+import '/view/post_detail_screen.dart';
+import '/view/profile_screen.dart';
 import '/utils/colors.dart';
 import '../utils/global_vairable.dart';
 import '../widgets/animated_dialogue.dart';

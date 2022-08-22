@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '/models/user.dart';
-import '/provider/user_provider.dart';
+import '/controller/user_provider.dart';
 import '/resources/firestore_methods.dart';
 import '/utils/colors.dart';
 import '../utils/global_vairable.dart';

@@ -37,7 +37,6 @@ class _MessageScreenState extends State<MessageScreen> {
                   position: const BadgePosition(bottom: -8, end: 0),
                   elevation: 0,
                   borderRadius: BorderRadius.circular(8),
-                 
                   badgeContent:
                       const Text('', style: TextStyle(color: Colors.white)),
                   showBadge: snapshot.data!.data()!['status'] == 'Online',
@@ -50,7 +49,7 @@ class _MessageScreenState extends State<MessageScreen> {
                         NetworkImage(snapshot.data!.data()!['photoUrl']),
                   ),
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -79,7 +78,12 @@ class _MessageScreenState extends State<MessageScreen> {
             )),
             body: Column(
               children: [
-                Expanded(child: Messages(user: widget.user,userImage: snapshot.data!.data()!['photoUrl'])),
+                Expanded(
+                    child: Messages(
+                  user: widget.user,
+                  userImage: snapshot.data!.data()!['photoUrl'],
+                  chatName: snapshot.data!.data()!['username'],
+                )),
                 NewMessage(user: widget.user),
               ],
             ),
