@@ -1,16 +1,32 @@
-# insta_clone
+# Watcher
 
-A new Flutter project.
+Instagram is a social media application where people can interact with each other.
 
-## Getting Started
+## Introduction
+Instagram is developed using Flutter and Firebase. Instagram connects you to people around the world on a single tap.
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+1. Login
+2. Sign-Up
+3. Reset Password
+4. Add Post
+5. Feeds
+6. Timeline
+7. Search
+8. Profile Screen
+9. Activity Screen
+10. Inbox
+11. Messages
+12. Online/Offline Status
+13. Comment
+14. Like
+15. Like Comment
+16. Like Animation
+17. Post Preview
+18. Sign-Out
+19. Delete Post
+20. Camera/Gallery Upload
+21. Follow/Unfollow
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Group 1](https://user-images.githubusercontent.com/89972827/185945138-bee87d1a-f042-48f5-89c0-a7e1d78f2e05.png)
