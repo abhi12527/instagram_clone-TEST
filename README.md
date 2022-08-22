@@ -1,4 +1,4 @@
-# Watcher
+# Instagram-Clone
 
 Instagram is a social media application where people can interact with each other.
 
